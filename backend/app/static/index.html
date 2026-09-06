@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloneStudio PT-BR - Estúdio Open Source de Clones Digitais</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #111827; }
+    ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+  </style>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+
+  <!-- Top Navigation Header -->
+  <header class="border-b border-gray-800 bg-gray-900/80 backdrop-blur sticky top-0 z-50 px-6 py-3.5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+        <i data-lucide="video" class="w-5 h-5 text-white"></i>
+      </div>
+      <div>
+        <h1 class="font-bold text-lg leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-indigo-300">
+          CloneStudio <span class="text-xs uppercase px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 font-semibold border border-indigo-500/30">PT-BR</span>
+        </h1>
+        <p class="text-xs text-gray-400">Estúdio Open Source de Clones Digitais & Vídeos com IA</p>
+      </div>
+    </div>
+
+    <!-- Main Navigation Tabs -->
+    <nav class="flex items-center gap-1 bg-gray-950/60 p-1 rounded-xl border border-gray-800">
+      <button onclick="switchTab('clones')" id="tab-btn-clones" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 bg-indigo-600 text-white">
+        <i data-lucide="users" class="w-4 h-4"></i> Meus Clones
+      </button>
+      <button onclick="switchTab('script')" id="tab-btn-script" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-gray-400 hover:text-white">
+        <i data-lucide="sparkles" class="w-4 h-4"></i> Roteiro & IA
+      </button>
+      <button onclick="switchTab('timeline')" id="tab-btn-timeline" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-gray-400 hover:text-white">
+        <i data-lucide="layers" class="w-4 h-4"></i> Timeline & B-Roll
+      </button>
+      <button onclick="switchTab('social')" id="tab-btn-social" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-gray-400 hover:text-white">
+        <i data-lucide="share-2" class="w-4 h-4 text-pink-400"></i> Publicar & Distribuir
+      </button>
+      <button onclick="switchTab('settings')" id="tab-btn-settings" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-gray-400 hover:text-white">
+        <i data-lucide="settings" class="w-4 h-4"></i> Configurações
+      </button>
+    </nav>
+
+    <!-- Quick Status Badge -->
+    <div class="flex items-center gap-3">
+      <div id="worker-status-badge" class="flex items-center gap-2 text-xs px-3 py-1.5 rounded-full bg-gray-800 text-gray-300 border border-gray-700">
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        <span id="worker-status-text">Worker: Local (Leve)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 p-6 max-w-7xl mx-auto w-full">
+
+    <!-- ==================== TAB 1: MEUS CLONES ==================== -->
+    <section id="tab-clones" class="tab-content space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-bold text-white">Perfis de Avatares e Vozes</h2>
+          <p class="text-sm text-gray-400">Grave seu vídeo ou suba arquivos para a IA aprender seu rosto e entonação.</p>
+        </div>
+        <button onclick="openNewCloneModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-medium text-sm flex items-center gap-2 shadow-lg shadow-indigo-600/20 transition">
+          <i data-lucide="plus" class="w-4 h-4"></i> Novo Clone
+        </button>
+      </div>
+
+      <!-- Clones Grid -->
+      <div id="clones-list-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Dynamic Cards Loaded via JS -->
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: ROTEIRO & IA ==================== -->
+    <section id="tab-script" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Panel: Templates PT-BR (4 Cols) -->
+        <div class="lg:col-span-4 bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white flex items-center gap-2">
+              <i data-lucide="layout-template" class="w-4 h-4 text-indigo-400"></i> Templates em PT-BR
+            </h3>
+            <span class="text-xs text-gray-400">Vídeos virais & didáticos</span>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-gray-300 uppercase tracking-wider">Formato do Roteiro</label>
+            <select id="template-select" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm focus:border-indigo-500 focus:outline-none transition">
+              <option value="shorts_viral_hook">Shorts / Reels - Gancho Viral (30s)</option>
+              <option value="shorts_curiosity_explainer">Shorts / Reels - Curiosidade & Fatos (60s)</option>
+              <option value="didactic_tutorial">Vídeo Explicativo / Aula Didática (90s)</option>
+              <option value="commercial_pitch">Pitch de Vendas / Comercial (45s)</option>
+              <option value="quick_news">Notícia Rápida / Boletim (30s)</option>
+              <option value="storytelling_personal">Storytelling Pessoal (60s)</option>
+            </select>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-gray-300 uppercase tracking-wider">Tema ou Assunto</label>
+            <textarea id="script-topic" rows="3" placeholder="Ex: Por que a IA está revolucionando a criação de vídeos para negócios no Brasil..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm focus:border-indigo-500 focus:outline-none transition resize-none"></textarea>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs font-semibold text-gray-300 uppercase tracking-wider">Público</label>
+              <input id="script-audience" type="text" value="Geral / Empreendedores" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-xs focus:border-indigo-500 focus:outline-none transition">
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-gray-300 uppercase tracking-wider">Tom de Voz</label>
+              <input id="script-tone" type="text" value="Descontraído e Confiante" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-xs focus:border-indigo-500 focus:outline-none transition">
+            </div>
+          </div>
+
+          <button onclick="handleGenerateScript()" id="btn-generate-script" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20 transition">
+            <i data-lucide="wand-2" class="w-4 h-4"></i> Gerar Roteiro Estruturado
+          </button>
+        </div>
+
+        <!-- Center Panel: Script Editor (5 Cols) -->
+        <div class="lg:col-span-5 bg-gray-900 border border-gray-800 rounded-2xl p-5 flex flex-col space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white flex items-center gap-2">
+              <i data-lucide="file-text" class="w-4 h-4 text-indigo-400"></i> Editor de Roteiro
+            </h3>
+            <div class="flex items-center gap-2">
+              <span id="script-stats" class="text-xs px-2.5 py-1 rounded-md bg-gray-800 text-gray-300 font-mono">0 palavras • ~0s de fala</span>
+            </div>
+          </div>
+
+          <textarea id="full-script-text" rows="12" placeholder="O texto que seu clone irá falar aparecerá aqui. Você também pode digitar livremente..." class="flex-1 w-full bg-gray-950 border border-gray-800 rounded-xl p-4 text-sm leading-relaxed focus:border-indigo-500 focus:outline-none transition font-sans"></textarea>
+
+          <div class="flex items-center justify-between pt-2 border-t border-gray-800">
+            <button onclick="handleCheckGrammar()" id="btn-check-grammar" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-xl text-xs font-medium flex items-center gap-1.5 transition">
+              <i data-lucide="spell-check" class="w-3.5 h-3.5 text-green-400"></i> Revisar Gramática PT-BR
+            </button>
+            <button onclick="applyScriptToTimeline()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i> Usar na Timeline
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Panel: Chat Copilot (3 Cols) -->
+        <div class="lg:col-span-3 bg-gray-900 border border-gray-800 rounded-2xl p-5 flex flex-col space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+              <i data-lucide="message-square" class="w-4 h-4 text-purple-400"></i> Copilot IA
+            </h3>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-purple-500/20 text-purple-300" id="copilot-llm-label">DeepSeek</span>
+          </div>
+
+          <div id="copilot-chat-history" class="flex-1 overflow-y-auto space-y-3 p-2 bg-gray-950 rounded-xl border border-gray-800 text-xs min-h-[220px] max-h-[300px]">
+            <div class="p-2.5 rounded-lg bg-gray-900 text-gray-300">
+              👋 Olá! Peça para eu encurtar o texto, criar um gancho mais forte ou sugerir metáforas em PT-BR.
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input id="copilot-input" type="text" placeholder="Ex: Deixe o gancho mais viral..." class="flex-1 bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs focus:border-indigo-500 focus:outline-none transition">
+            <button onclick="handleSendCopilot()" class="p-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-white transition">
+              <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: TIMELINE & B-ROLL ==================== -->
+    <section id="tab-timeline" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left: Video Settings & Subtitles (5 Cols) -->
+        <div class="lg:col-span-5 bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-5">
+          <h3 class="font-bold text-white flex items-center gap-2">
+            <i data-lucide="sliders" class="w-4 h-4 text-indigo-400"></i> Estilo e Configuração do Vídeo
+          </h3>
+
+          <!-- Formato de Vídeo -->
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-gray-300 uppercase tracking-wider">Formato / Proporção de Tela</label>
+            <div class="grid grid-cols-3 gap-3">
+              <button onclick="selectAspect('9:16')" id="aspect-btn-9-16" class="aspect-btn p-3 rounded-xl border border-indigo-500 bg-indigo-500/10 text-center transition">
+                <div class="text-sm font-bold text-white">9:16</div>
+                <div class="text-[10px] text-gray-400">TikTok / Reels</div>
+              </button>
+              <button onclick="selectAspect('16:9')" id="aspect-btn-16-9" class="aspect-btn p-3 rounded-xl border border-gray-800 bg-gray-950 text-center transition hover:border-gray-700">
+                <div class="text-sm font-bold text-white">16:9</div>
+                <div class="text-[10px] text-gray-400">YouTube / Aulas</div>
+              </button>
+              <button onclick="selectAspect('1:1')" id="aspect-btn-1-1" class="aspect-btn p-3 rounded-xl border border-gray-800 bg-gray-950 text-center transition hover:border-gray-700">
+                <div class="text-sm font-bold text-white">1:1</div>
+                <div class="text-[10px] text-gray-400">Quadrado Feed</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- 5 Estilos de Legendas -->
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-gray-300 uppercase tracking-wider">Estilo das Legendas Automáticas (5 Modos)</label>
+            <div id="subtitles-style-container" class="space-y-2">
+              <!-- Loaded dynamically -->
+            </div>
+          </div>
+
+          <!-- Trilha de Fundo (BGM) + Auto-Ducking -->
+          <div class="space-y-3 pt-3 border-t border-gray-800">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="music" class="w-3.5 h-3.5 text-pink-400"></i> Música de Fundo (BGM)
+              </label>
+              <span class="text-[10px] text-green-400 font-medium">Auto-Ducking Ativo</span>
+            </div>
+            <input type="file" id="bgm-file-input" accept="audio/*" class="text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-gray-200 hover:file:bg-gray-700 cursor-pointer">
+            <div class="flex items-center gap-3">
+              <span class="text-xs text-gray-400">Volume:</span>
+              <input id="bgm-volume-slider" type="range" min="0.05" max="0.4" step="0.05" value="0.15" class="flex-1 accent-indigo-500">
+              <span id="bgm-volume-val" class="text-xs font-mono text-gray-300">15%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Timeline Layers & Render Trigger (7 Cols) -->
+        <div class="lg:col-span-7 bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-5 flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-white flex items-center gap-2">
+                <i data-lucide="film" class="w-4 h-4 text-purple-400"></i> Camadas de B-Roll e Imagens de Apoio
+              </h3>
+              <button onclick="addBrollLayer()" class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-medium flex items-center gap-1.5 transition">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i> Adicionar Overlay
+              </button>
+            </div>
+
+            <!-- Visual Timeline List -->
+            <div id="timeline-layers-list" class="space-y-3 max-h-[280px] overflow-y-auto pr-1">
+              <!-- Timeline Items will be rendered here -->
+            </div>
+          </div>
+
+          <!-- Final Render Box -->
+          <div class="p-4 bg-gray-950 rounded-xl border border-gray-800 space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-xs text-gray-400">Clone Selecionado:</span>
+                <span id="selected-clone-name" class="font-bold text-white text-sm block">Nenhum</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="handleExportZip()" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-xl text-xs font-medium flex items-center gap-1.5 transition" title="Exporta ZIP com arquivos e script para rodar em qualquer máquina gamer ou servidor">
+                  <i data-lucide="archive" class="w-3.5 h-3.5 text-amber-400"></i> Exportar ZIP
+                </button>
+                <button onclick="handleStartRender()" id="btn-start-render" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-sm font-bold flex items-center gap-2 shadow-lg shadow-indigo-600/30 transition">
+                  <i data-lucide="play" class="w-4 h-4 fill-white"></i> Gerar Vídeo
+                </button>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="render-progress-box" class="hidden space-y-2 pt-2 border-t border-gray-800">
+              <div class="flex items-center justify-between text-xs">
+                <span id="render-status-msg" class="text-gray-300">Processando...</span>
+                <span id="render-progress-pct" class="font-mono text-indigo-400 font-bold">0%</span>
+              </div>
+              <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
+                <div id="render-progress-bar" class="bg-indigo-500 h-full w-0 transition-all duration-300"></div>
+              </div>
+            </div>
+
+            <!-- Output Video Player -->
+            <div id="rendered-video-container" class="hidden space-y-3 pt-3 border-t border-gray-800">
+              <h4 class="text-xs font-bold text-green-400 flex items-center gap-1.5">
+                <i data-lucide="check-circle" class="w-4 h-4"></i> Vídeo Final Renderizado com Sucesso!
+              </h4>
+              <video id="rendered-video-player" controls class="w-full max-h-64 rounded-xl border border-gray-800 bg-black"></video>
+              <div class="grid grid-cols-2 gap-3">
+                <a id="download-video-btn" href="#" download class="py-2.5 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                  <i data-lucide="download" class="w-4 h-4"></i> Baixar MP4
+                </a>
+                <button onclick="goToPublishTab()" class="py-2.5 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-pink-600/20 transition">
+                  <i data-lucide="share-2" class="w-4 h-4"></i> Publicar / Compartilhar
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: PUBLICAR & DISTRIBUIR ==================== -->
+    <section id="tab-social" class="tab-content hidden space-y-6">
+      
+      <!-- Top Action Bar -->
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="share-2" class="w-5 h-5 text-pink-400"></i> Central de Publicação Multi-Plataforma
+          </h2>
+          <p class="text-xs text-gray-400">Gere copys otimizadas com IA e publique ou compartilhe direto nas redes e mensageiros.</p>
+        </div>
+        <button onclick="handleGenerateCopies()" id="btn-generate-copies" class="px-4 py-2.5 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-pink-600/20 transition">
+          <i data-lucide="wand-2" class="w-4 h-4"></i> Gerar Copys com IA para Todas as Redes
+        </button>
+      </div>
+
+      <!-- Quick 1-Click Sharing Bar (Zero Config) -->
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-3">
+        <h3 class="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+          <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i> Compartilhamento Rápido (1 Clique - Sem Configuração)
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <button onclick="shareDirectWhatsApp()" class="p-3 bg-emerald-950/40 border border-emerald-800/50 hover:bg-emerald-900/40 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-emerald-400 transition">
+            <i data-lucide="message-circle" class="w-4 h-4"></i> Abrir WhatsApp Web
+          </button>
+          <button onclick="shareDirectTelegram()" class="p-3 bg-sky-950/40 border border-sky-800/50 hover:bg-sky-900/40 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-sky-400 transition">
+            <i data-lucide="send" class="w-4 h-4"></i> Abrir Telegram Share
+          </button>
+          <button onclick="shareNativeWebShare()" class="p-3 bg-purple-950/40 border border-purple-800/50 hover:bg-purple-900/40 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-purple-400 transition">
+            <i data-lucide="share" class="w-4 h-4"></i> Compartilhar no Sistema (Web Share)
+          </button>
+        </div>
+      </div>
+
+      <!-- Social Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+        <!-- 1. Instagram Reels -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-sm text-pink-400 flex items-center gap-1.5">
+                <i data-lucide="instagram" class="w-4 h-4"></i> Instagram Reels
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-pink-500/20 text-pink-300">9:16 Vertical</span>
+            </div>
+            <textarea id="copy-instagram" rows="6" placeholder="Legenda para o Instagram..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs leading-relaxed focus:border-pink-500 focus:outline-none transition resize-none"></textarea>
+          </div>
+          <div class="space-y-2 pt-2 border-t border-gray-800">
+            <button onclick="copyToClipboard('copy-instagram')" class="w-full py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Texto
+            </button>
+            <button onclick="publishInstagramReels()" class="w-full py-2 bg-pink-600 hover:bg-pink-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Publicar via Meta API
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. TikTok -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-sm text-cyan-400 flex items-center gap-1.5">
+                <i data-lucide="music-2" class="w-4 h-4"></i> TikTok
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">Viral Short</span>
+            </div>
+            <textarea id="copy-tiktok" rows="6" placeholder="Texto curto e hashtags virais para o TikTok..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs leading-relaxed focus:border-cyan-500 focus:outline-none transition resize-none"></textarea>
+          </div>
+          <div class="space-y-2 pt-2 border-t border-gray-800">
+            <button onclick="copyToClipboard('copy-tiktok')" class="w-full py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Texto
+            </button>
+            <button onclick="publishTikTok()" class="w-full py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Postar no TikTok
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Kwai -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-sm text-orange-400 flex items-center gap-1.5">
+                <i data-lucide="video" class="w-4 h-4"></i> Kwai
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-orange-500/20 text-orange-300">Brasil Shorts</span>
+            </div>
+            <textarea id="copy-kwai" rows="6" placeholder="Legenda chamativa para o Kwai..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs leading-relaxed focus:border-orange-500 focus:outline-none transition resize-none"></textarea>
+          </div>
+          <div class="space-y-2 pt-2 border-t border-gray-800">
+            <button onclick="copyToClipboard('copy-kwai')" class="w-full py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Texto
+            </button>
+            <button onclick="publishKwai()" class="w-full py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Postar no Kwai
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. Telegram Bot (Direct HD Video Send) -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-sm text-sky-400 flex items-center gap-1.5">
+                <i data-lucide="send" class="w-4 h-4"></i> Telegram (Bot Direto)
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">Vídeo HD + Bot</span>
+            </div>
+            <textarea id="copy-telegram" rows="6" placeholder="Mensagem formatada para Telegram..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs leading-relaxed focus:border-sky-500 focus:outline-none transition resize-none"></textarea>
+          </div>
+          <div class="space-y-2 pt-2 border-t border-gray-800">
+            <button onclick="copyToClipboard('copy-telegram')" class="w-full py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Texto
+            </button>
+            <button onclick="sendTelegramDirect()" class="w-full py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="send" class="w-3.5 h-3.5"></i> Disparar para Canal / Chat
+            </button>
+          </div>
+        </div>
+
+        <!-- 5. WhatsApp (Evolution API) -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-sm text-emerald-400 flex items-center gap-1.5">
+                <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp (Evolution API)
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Grupos & Listas</span>
+            </div>
+            <textarea id="copy-whatsapp" rows="4" placeholder="Mensagem com *negrito* para WhatsApp..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs leading-relaxed focus:border-emerald-500 focus:outline-none transition resize-none"></textarea>
+            <input id="whatsapp-dest-number" type="text" placeholder="Número com DDD (ex: 11999998888)" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-xs focus:border-emerald-500 focus:outline-none transition">
+          </div>
+          <div class="space-y-2 pt-2 border-t border-gray-800">
+            <button onclick="copyToClipboard('copy-whatsapp')" class="w-full py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Texto
+            </button>
+            <button onclick="sendWhatsAppEvolution()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="send" class="w-3.5 h-3.5"></i> Enviar Vídeo no WhatsApp
+            </button>
+          </div>
+        </div>
+
+        <!-- 6. Facebook Reels & Signal -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-sm text-blue-400 flex items-center gap-1.5">
+                <i data-lucide="facebook" class="w-4 h-4"></i> Facebook / Signal
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">Feed & Seguro</span>
+            </div>
+            <textarea id="copy-facebook" rows="6" placeholder="Título e descrição para Facebook / Signal..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs leading-relaxed focus:border-blue-500 focus:outline-none transition resize-none"></textarea>
+          </div>
+          <div class="space-y-2 pt-2 border-t border-gray-800">
+            <button onclick="copyToClipboard('copy-facebook')" class="w-full py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Texto
+            </button>
+            <button onclick="publishFacebookReels()" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Postar no Facebook
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: CONFIGURAÇÕES & WORKER ==================== -->
+    <section id="tab-settings" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- LLM Settings -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4">
+          <h3 class="font-bold text-white flex items-center gap-2">
+            <i data-lucide="cpu" class="w-4 h-4 text-indigo-400"></i> Provedores de LLM
+          </h3>
+          <p class="text-xs text-gray-400">Compatível com a especificação OpenAI. Conecte facilmente com modelos brasileiros, chineses ou locais.</p>
+
+          <div class="space-y-3">
+            <div>
+              <label class="text-xs font-semibold text-gray-300 uppercase">Provedor Ativo</label>
+              <select id="llm-provider-select" onchange="onLlmProviderChange()" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm focus:border-indigo-500 focus:outline-none transition mt-1">
+                <option value="deepseek">DeepSeek (V3 / R1 - Alta Qualidade & Rápido)</option>
+                <option value="maritaca">Maritaca AI (MariTalk / Sabiá-3 - IA Brasileira)</option>
+                <option value="ollama">Ollama (100% Local / Offline)</option>
+                <option value="custom">Outro Provedor Compatível com OpenAI</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-xs font-semibold text-gray-300 uppercase">Chave de API (API Key)</label>
+              <input id="llm-api-key" type="password" placeholder="sk-..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs focus:border-indigo-500 focus:outline-none transition mt-1">
+            </div>
+
+            <div>
+              <label class="text-xs font-semibold text-gray-300 uppercase">URL Base da API (Endpoint)</label>
+              <input id="llm-base-url" type="text" placeholder="https://api.deepseek.com/v1" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs focus:border-indigo-500 focus:outline-none transition mt-1">
+            </div>
+
+            <div>
+              <label class="text-xs font-semibold text-gray-300 uppercase">Nome do Modelo</label>
+              <input id="llm-model-name" type="text" placeholder="deepseek-chat" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs focus:border-indigo-500 focus:outline-none transition mt-1">
+            </div>
+
+            <button onclick="saveLlmSettings()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-xs font-semibold transition">
+              Salvar Configurações de LLM
+            </button>
+          </div>
+        </div>
+
+        <!-- Worker & GPU Settings -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4">
+          <h3 class="font-bold text-white flex items-center gap-2">
+            <i data-lucide="cloud-lightning" class="w-4 h-4 text-purple-400"></i> Worker de Renderização (Google Colab / Servidor com GPU)
+          </h3>
+          <p class="text-xs text-gray-400">Para computadores modestos, conecte o notebook Colab gratuito com Cloudflare Tunnel ou aponte para um servidor com placa de vídeo.</p>
+
+          <div class="space-y-3">
+            <div>
+              <label class="text-xs font-semibold text-gray-300 uppercase">URL do Worker (Cloudflare Tunnel ou IP:Porta)</label>
+              <input id="worker-url-input" type="text" placeholder="https://exemplo.trycloudflare.com" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs focus:border-indigo-500 focus:outline-none transition mt-1 font-mono">
+            </div>
+
+            <div>
+              <label class="text-xs font-semibold text-gray-300 uppercase">Token de Autenticação (Opcional)</label>
+              <input id="worker-token-input" type="password" placeholder="Opcional se configurado no servidor" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs focus:border-indigo-500 focus:outline-none transition mt-1">
+            </div>
+
+            <div class="flex items-center gap-3 pt-2">
+              <button onclick="handleTestWorker()" id="btn-test-worker" class="px-4 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+                <i data-lucide="radio" class="w-4 h-4"></i> Testar Conexão com Worker
+              </button>
+              <span id="worker-test-result" class="text-xs text-gray-400"></span>
+            </div>
+
+            <!-- Colab Info Banner -->
+            <div class="p-3.5 rounded-xl bg-gray-950 border border-gray-800 text-xs space-y-2">
+              <div class="font-semibold text-amber-400 flex items-center gap-1.5">
+                <i data-lucide="info" class="w-4 h-4"></i> Notebook Oficial Google Colab
+              </div>
+              <p class="text-gray-400 leading-relaxed">
+                Você encontra o arquivo <code class="text-indigo-400">worker_colab/CloneStudio_Colab_Worker.ipynb</code> pronto no projeto para rodar em 1 clique na GPU gratuita do Google!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social API & Bot Credentials -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4 md:col-span-2">
+          <h3 class="font-bold text-white flex items-center gap-2">
+            <i data-lucide="key" class="w-4 h-4 text-pink-400"></i> Credenciais de Redes Sociais & Bots (Opcional)
+          </h3>
+          <p class="text-xs text-gray-400">Preencha as credenciais dos serviços que deseja publicar de forma automatizada.</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="space-y-1">
+              <label class="font-semibold text-sky-400">Telegram Bot Token</label>
+              <input id="cfg-tg-token" type="password" placeholder="123456:ABC-DEF..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 focus:border-sky-500 focus:outline-none">
+            </div>
+            <div class="space-y-1">
+              <label class="font-semibold text-sky-400">Telegram Chat ID / Canal</label>
+              <input id="cfg-tg-chat" type="text" placeholder="@meu_canal ou -100123456" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 focus:border-sky-500 focus:outline-none">
+            </div>
+            <div class="space-y-1">
+              <label class="font-semibold text-emerald-400">WhatsApp Evolution API URL</label>
+              <input id="cfg-wa-url" type="text" placeholder="http://localhost:8080" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 focus:border-emerald-500 focus:outline-none">
+            </div>
+            <div class="space-y-1">
+              <label class="font-semibold text-emerald-400">WhatsApp API Key</label>
+              <input id="cfg-wa-key" type="password" placeholder="Chave da Evolution API" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 focus:border-emerald-500 focus:outline-none">
+            </div>
+            <div class="space-y-1">
+              <label class="font-semibold text-emerald-400">WhatsApp Instância</label>
+              <input id="cfg-wa-instance" type="text" placeholder="Nome da instância" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 focus:border-emerald-500 focus:outline-none">
+            </div>
+            <div class="space-y-1">
+              <label class="font-semibold text-pink-400">Meta Graph API Token</label>
+              <input id="cfg-meta-token" type="password" placeholder="Token Instagram/Facebook" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 focus:border-pink-500 focus:outline-none">
+            </div>
+          </div>
+
+          <button onclick="saveSocialSettings()" class="px-4 py-2 bg-pink-600 hover:bg-pink-500 rounded-xl text-xs font-semibold text-white transition">
+            Salvar Credenciais de Redes
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal: Novo Clone -->
+  <div id="new-clone-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-lg w-full p-6 space-y-5">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <i data-lucide="user-plus" class="w-5 h-5 text-indigo-400"></i> Criar Novo Perfil de Clone
+        </h3>
+        <button onclick="closeNewCloneModal()" class="text-gray-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs font-semibold text-gray-300 uppercase">Nome do Perfil</label>
+          <input id="clone-name-input" type="text" placeholder="Ex: Meu Avatar - Estúdio" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm focus:border-indigo-500 focus:outline-none transition mt-1">
+        </div>
+
+        <div>
+          <label class="text-xs font-semibold text-gray-300 uppercase">Tags / Estilo</label>
+          <input id="clone-tags-input" type="text" placeholder="Ex: camisa preta, formal, iluminação quente" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs focus:border-indigo-500 focus:outline-none transition mt-1">
+        </div>
+
+        <div>
+          <label class="text-xs font-semibold text-gray-300 uppercase">Vídeo de Referência (MP4 - 10s a 30s)</label>
+          <input id="clone-video-file" type="file" accept="video/mp4,video/webm" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-gray-200 hover:file:bg-gray-700 cursor-pointer mt-1">
+        </div>
+
+        <div>
+          <label class="text-xs font-semibold text-gray-300 uppercase">Amostra de Áudio da sua Voz (WAV / MP3 - Opcional)</label>
+          <input id="clone-voice-file" type="file" accept="audio/*" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-gray-200 hover:file:bg-gray-700 cursor-pointer mt-1">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-gray-800">
+        <button onclick="closeNewCloneModal()" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold transition">
+          Cancelar
+        </button>
+        <button onclick="handleSaveNewClone()" id="btn-save-clone" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition">
+          Salvar Clone
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Javascript Logic -->
+  <script>
+    // State Store
+    const state = {
+      clones: [],
+      selectedCloneId: null,
+      aspectRatio: '9:16',
+      subtitleStyle: 'hormozi_bold',
+      visualLayers: [],
+      llmProvider: 'deepseek',
+      llmApiKey: '',
+      llmBaseUrl: 'https://api.deepseek.com/v1',
+      llmModel: 'deepseek-chat',
+      workerUrl: '',
+      workerToken: '',
+      currentJobId: null,
+      renderedVideoPath: null
+    };
+
+    function updateIcons() {
+      lucide.createIcons();
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white');
+        btn.classList.add('text-gray-400');
+      });
+
+      const target = document.getElementById(`tab-${tabId}`);
+      const btn = document.getElementById(`tab-btn-${tabId}`);
+      if (target) target.classList.remove('hidden');
+      if (btn) {
+        btn.classList.add('bg-indigo-600', 'text-white');
+        btn.classList.remove('text-gray-400');
+      }
+      updateIcons();
+    }
+
+    function goToPublishTab() {
+      switchTab('social');
+      handleGenerateCopies();
+    }
+
+    // Load Clones
+    async function loadClones() {
+      try {
+        const res = await fetch('/api/clones/list');
+        const data = await res.json();
+        state.clones = data;
+        renderClonesGrid();
+      } catch (err) {
+        console.error('Erro ao carregar clones:', err);
+      }
+    }
+
+    function renderClonesGrid() {
+      const grid = document.getElementById('clones-list-grid');
+      if (state.clones.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center border border-dashed border-gray-800 rounded-2xl p-8">
+            <i data-lucide="user-x" class="w-8 h-8 text-gray-600 mx-auto mb-3"></i>
+            <h4 class="font-bold text-gray-300">Nenhum clone cadastrado ainda</h4>
+            <p class="text-xs text-gray-500 mt-1 mb-4">Clique em "Novo Clone" para cadastrar seu primeiro rosto e voz.</p>
+            <button onclick="openNewCloneModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-xs font-semibold text-white">Criar Clone</button>
+          </div>
+        `;
+        updateIcons();
+        return;
+      }
+
+      grid.innerHTML = state.clones.map(clone => `
+        <div class="bg-gray-900 border ${state.selectedCloneId === clone.id ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-gray-800'} rounded-2xl p-4 flex flex-col justify-between transition hover:border-gray-700">
+          <div class="space-y-3">
+            <div class="aspect-video bg-gray-950 rounded-xl overflow-hidden flex items-center justify-center relative">
+              <div class="w-12 h-12 rounded-full bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold text-lg">
+                ${clone.name.charAt(0).toUpperCase()}
+              </div>
+              <span class="absolute bottom-2 right-2 text-[10px] px-2 py-0.5 rounded bg-black/60 text-gray-300 backdrop-blur">MP4</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-white text-sm">${clone.name}</h4>
+              <p class="text-xs text-gray-400 line-clamp-1">${clone.description || 'Perfil de clone configurado'}</p>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              ${(clone.tags || []).map(t => `<span class="text-[10px] px-2 py-0.5 bg-gray-800 text-gray-300 rounded-md">${t}</span>`).join('')}
+            </div>
+          </div>
+          <div class="flex items-center justify-between pt-4 mt-4 border-t border-gray-800">
+            <button onclick="selectClone('${clone.id}')" class="px-3 py-1.5 ${state.selectedCloneId === clone.id ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'} rounded-lg text-xs font-medium transition">
+              ${state.selectedCloneId === clone.id ? '✓ Selecionado' : 'Selecionar'}
+            </button>
+            <button onclick="handleDeleteClone('${clone.id}')" class="text-gray-500 hover:text-red-400 p-1.5 rounded-lg transition">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      updateIcons();
+    }
+
+    function selectClone(id) {
+      state.selectedCloneId = id;
+      const clone = state.clones.find(c => c.id === id);
+      if (clone) {
+        document.getElementById('selected-clone-name').innerText = clone.name;
+      }
+      renderClonesGrid();
+    }
+
+    async function handleDeleteClone(id) {
+      if (!confirm('Deseja excluir este perfil de clone?')) return;
+      await fetch(`/api/clones/${id}`, { method: 'DELETE' });
+      await loadClones();
+    }
+
+    // Modal
+    function openNewCloneModal() { document.getElementById('new-clone-modal').classList.remove('hidden'); updateIcons(); }
+    function closeNewCloneModal() { document.getElementById('new-clone-modal').classList.add('hidden'); }
+
+    async function handleSaveNewClone() {
+      const name = document.getElementById('clone-name-input').value.trim();
+      const tags = document.getElementById('clone-tags-input').value.trim();
+      const vFile = document.getElementById('clone-video-file').files[0];
+      const aFile = document.getElementById('clone-voice-file').files[0];
+
+      if (!name) return alert('Por favor, informe o nome do clone.');
+      if (!vFile) return alert('Por favor, selecione um vídeo de referência (MP4).');
+
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('tags', tags);
+      formData.append('video', vFile);
+      if (aFile) formData.append('voice_sample', aFile);
+
+      const btn = document.getElementById('btn-save-clone');
+      btn.innerText = 'Salvando...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/clones/create', { method: 'POST', body: formData });
+        const data = await res.json();
+        closeNewCloneModal();
+        await loadClones();
+        selectClone(data.profile.id);
+      } catch (e) {
+        alert('Erro ao salvar clone: ' + e.message);
+      } finally {
+        btn.innerText = 'Salvar Clone';
+        btn.disabled = false;
+      }
+    }
+
+    // Subtitle Styles
+    async function loadSubtitleStyles() {
+      const res = await fetch('/api/timeline/subtitle-styles');
+      const data = await res.json();
+      const container = document.getElementById('subtitles-style-container');
+      container.innerHTML = data.styles.map(s => `
+        <div onclick="selectSubtitleStyle('${s.id}')" id="sub-style-${s.id}" class="p-3 rounded-xl border ${state.subtitleStyle === s.id ? 'border-indigo-500 bg-indigo-500/10' : 'border-gray-800 bg-gray-950 hover:border-gray-700'} cursor-pointer flex items-center justify-between transition">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full" style="background-color: ${s.preview_color}"></span>
+              <h5 class="text-xs font-bold text-white">${s.name}</h5>
+            </div>
+            <p class="text-[11px] text-gray-400 mt-0.5">${s.description}</p>
+          </div>
+          <span class="text-xs font-bold ${state.subtitleStyle === s.id ? 'text-indigo-400' : 'text-gray-600'}">●</span>
+        </div>
+      `).join('');
+    }
+
+    function selectSubtitleStyle(id) {
+      state.subtitleStyle = id;
+      loadSubtitleStyles();
+    }
+
+    function selectAspect(aspect) {
+      state.aspectRatio = aspect;
+      document.querySelectorAll('.aspect-btn').forEach(b => {
+        b.classList.remove('border-indigo-500', 'bg-indigo-500/10');
+        b.classList.add('border-gray-800', 'bg-gray-950');
+      });
+      const selectedBtn = document.getElementById(`aspect-btn-${aspect.replace(':', '-')}`);
+      if (selectedBtn) {
+        selectedBtn.classList.remove('border-gray-800', 'bg-gray-950');
+        selectedBtn.classList.add('border-indigo-500', 'bg-indigo-500/10');
+      }
+    }
+
+    // Script Generation
+    async function handleGenerateScript() {
+      const templateId = document.getElementById('template-select').value;
+      const topic = document.getElementById('script-topic').value.trim();
+      const audience = document.getElementById('script-audience').value.trim();
+      const tone = document.getElementById('script-tone').value.trim();
+
+      if (!topic) return alert('Por favor, informe o tema do vídeo.');
+
+      const btn = document.getElementById('btn-generate-script');
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Gerando com IA...`;
+      btn.disabled = true;
+      updateIcons();
+
+      try {
+        const res = await fetch('/api/llm/generate-script', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            template_id: templateId,
+            topic: topic,
+            target_audience: audience,
+            tone_of_voice: tone,
+            provider: state.llmProvider,
+            api_key: state.llmApiKey,
+            base_url: state.llmBaseUrl,
+            model: state.llmModel
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          const script = data.data.full_spoken_script || '';
+          document.getElementById('full-script-text').value = script;
+          updateScriptStats();
+          
+          if (data.data.speech_sections) {
+            state.visualLayers = [];
+            let currTime = 0.0;
+            data.data.speech_sections.forEach(sec => {
+              if (sec.text_overlay || sec.broll_suggestion) {
+                state.visualLayers.push({
+                  id: Math.random().toString(36).substring(7),
+                  start: currTime,
+                  end: currTime + 3.0,
+                  type: 'text_card',
+                  content: sec.text_overlay || sec.broll_suggestion,
+                  media_path: null
+                });
+              }
+              currTime += (sec.text.split(' ').length * 0.4);
+            });
+            renderTimelineLayers();
+          }
+        }
+      } catch (err) {
+        alert('Erro ao gerar roteiro: ' + err.message);
+      } finally {
+        btn.innerHTML = `<i data-lucide="wand-2" class="w-4 h-4"></i> Gerar Roteiro Estruturado`;
+        btn.disabled = false;
+        updateIcons();
+      }
+    }
+
+    function updateScriptStats() {
+      const text = document.getElementById('full-script-text').value.trim();
+      const words = text ? text.split(/\s+/).length : 0;
+      const seconds = Math.round((words / 140) * 60);
+      document.getElementById('script-stats').innerText = `${words} palavras • ~${seconds}s de fala`;
+    }
+    document.getElementById('full-script-text').addEventListener('input', updateScriptStats);
+
+    // Grammar Check
+    async function handleCheckGrammar() {
+      const text = document.getElementById('full-script-text').value.trim();
+      if (!text) return alert('Digite ou gere um roteiro primeiro.');
+      const btn = document.getElementById('btn-check-grammar');
+      btn.innerText = 'Revisando...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/llm/check-grammar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: text,
+            provider: state.llmProvider,
+            api_key: state.llmApiKey,
+            base_url: state.llmBaseUrl
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          document.getElementById('full-script-text').value = data.corrected;
+          updateScriptStats();
+          alert('Gramática e acentuação revisadas com sucesso!');
+        }
+      } catch (e) {
+        alert('Erro na revisão: ' + e.message);
+      } finally {
+        btn.innerHTML = `<i data-lucide="spell-check" class="w-3.5 h-3.5 text-green-400"></i> Revisar Gramática PT-BR`;
+        btn.disabled = false;
+        updateIcons();
+      }
+    }
+
+    function applyScriptToTimeline() {
+      switchTab('timeline');
+    }
+
+    // Copilot Chat
+    async function handleSendCopilot() {
+      const input = document.getElementById('copilot-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      const history = document.getElementById('copilot-chat-history');
+      history.innerHTML += `<div class="p-2.5 rounded-lg bg-indigo-600/20 text-indigo-200 text-right">${msg}</div>`;
+      input.value = '';
+
+      const currentScript = document.getElementById('full-script-text').value;
+      const fullPrompt = `Contexto do roteiro atual:\n"${currentScript}"\n\nPedido do usuário: ${msg}`;
+
+      try {
+        const res = await fetch('/api/llm/chat-copilot', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [{ role: 'user', content: fullPrompt }],
+            provider: state.llmProvider,
+            api_key: state.llmApiKey,
+            base_url: state.llmBaseUrl,
+            model: state.llmModel
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          history.innerHTML += `<div class="p-2.5 rounded-lg bg-gray-900 text-gray-200">${data.reply}</div>`;
+          history.scrollTop = history.scrollHeight;
+        }
+      } catch (err) {
+        history.innerHTML += `<div class="p-2.5 rounded-lg bg-red-900/30 text-red-300">Erro ao responder.</div>`;
+      }
+    }
+
+    // Timeline Layers
+    function renderTimelineLayers() {
+      const list = document.getElementById('timeline-layers-list');
+      if (state.visualLayers.length === 0) {
+        list.innerHTML = `<p class="text-xs text-gray-500 py-4 text-center">Nenhum overlay de B-Roll ativo. O vídeo focará apenas no clone.</p>`;
+        return;
+      }
+      list.innerHTML = state.visualLayers.map((layer, idx) => `
+        <div class="p-3 bg-gray-950 border border-gray-800 rounded-xl flex items-center justify-between text-xs">
+          <div class="flex items-center gap-3">
+            <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-400 font-mono">${layer.start}s - ${layer.end}s</span>
+            <span class="text-gray-200 font-medium">${layer.content}</span>
+          </div>
+          <button onclick="removeTimelineLayer(${idx})" class="text-gray-500 hover:text-red-400 p-1">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      `).join('');
+      updateIcons();
+    }
+
+    function addBrollLayer() {
+      const content = prompt('Digite o texto de apoio ou descrição da imagem de B-Roll:');
+      if (!content) return;
+      const start = parseFloat(prompt('Segundo inicial (ex: 2.5):', '0.0')) || 0.0;
+      const end = parseFloat(prompt('Segundo final (ex: 5.5):', String(start + 3.0))) || (start + 3.0);
+
+      state.visualLayers.push({
+        id: Math.random().toString(36).substring(7),
+        start, end,
+        type: 'text_card',
+        content,
+        media_path: null
+      });
+      renderTimelineLayers();
+    }
+
+    function removeTimelineLayer(idx) {
+      state.visualLayers.splice(idx, 1);
+      renderTimelineLayers();
+    }
+
+    // Export ZIP
+    async function handleExportZip() {
+      if (!state.selectedCloneId) return alert('Selecione um clone primeiro na aba "Meus Clones".');
+      const scriptText = document.getElementById('full-script-text').value.trim();
+      if (!scriptText) return alert('Escreva ou gere um roteiro primeiro.');
+
+      try {
+        const res = await fetch('/api/render/export-package', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            clone_id: state.selectedCloneId,
+            script_text: scriptText,
+            subtitle_style: state.subtitleStyle,
+            visual_layers: state.visualLayers
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          window.location.href = data.zip_url;
+          alert('Pacote ZIP exportado com sucesso!');
+        }
+      } catch (err) {
+        alert('Erro ao exportar ZIP: ' + err.message);
+      }
+    }
+
+    // Start Render
+    async function handleStartRender() {
+      if (!state.selectedCloneId) return alert('Selecione um clone primeiro na aba "Meus Clones".');
+      const scriptText = document.getElementById('full-script-text').value.trim();
+      if (!scriptText) return alert('Escreva ou gere um roteiro primeiro.');
+
+      const bgmVol = parseFloat(document.getElementById('bgm-volume-slider').value) || 0.15;
+
+      const btn = document.getElementById('btn-start-render');
+      btn.disabled = true;
+      document.getElementById('render-progress-box').classList.remove('hidden');
+      document.getElementById('rendered-video-container').classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/render/start-render', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            clone_id: state.selectedCloneId,
+            script_text: scriptText,
+            subtitle_style: state.subtitleStyle,
+            aspect_ratio: state.aspectRatio,
+            bgm_volume: bgmVol,
+            visual_layers: state.visualLayers,
+            render_mode: state.workerUrl ? 'hybrid_worker' : 'local_direct',
+            worker_url: state.workerUrl,
+            worker_token: state.workerToken
+          })
+        });
+        const data = await res.json();
+        state.currentJobId = data.job_id;
+        pollRenderStatus(data.job_id);
+      } catch (err) {
+        alert('Erro ao iniciar render: ' + err.message);
+        btn.disabled = false;
+      }
+    }
+
+    function pollRenderStatus(jobId) {
+      const interval = setInterval(async () => {
+        try {
+          const res = await fetch(`/api/render/status/${jobId}`);
+          const job = await res.json();
+
+          document.getElementById('render-status-msg').innerText = job.message || 'Processando...';
+          document.getElementById('render-progress-pct').innerText = `${job.progress}%`;
+          document.getElementById('render-progress-bar').style.width = `${job.progress}%`;
+
+          if (job.status === 'completed') {
+            clearInterval(interval);
+            document.getElementById('btn-start-render').disabled = false;
+            
+            const player = document.getElementById('rendered-video-player');
+            const downloadBtn = document.getElementById('download-video-btn');
+            const videoUrl = `/api/render/download-video/${jobId}`;
+            
+            state.renderedVideoPath = job.output_video;
+            player.src = videoUrl;
+            downloadBtn.href = videoUrl;
+            document.getElementById('rendered-video-container').classList.remove('hidden');
+          } else if (job.status === 'failed') {
+            clearInterval(interval);
+            document.getElementById('btn-start-render').disabled = false;
+            alert('Falha na renderização: ' + job.message);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }, 1500);
+    }
+
+    // Social & Copies
+    async function handleGenerateCopies() {
+      const script = document.getElementById('full-script-text').value.trim();
+      if (!script) return alert('Por favor, gere ou digite um roteiro na aba "Roteiro & IA" primeiro.');
+
+      const topic = document.getElementById('script-topic').value.trim();
+      const btn = document.getElementById('btn-generate-copies');
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Gerando Copys...`;
+      btn.disabled = true;
+      updateIcons();
+
+      try {
+        const res = await fetch('/api/social/generate-copies', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            script_text: script,
+            topic: topic,
+            provider: state.llmProvider,
+            api_key: state.llmApiKey,
+            base_url: state.llmBaseUrl
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'success' && data.copies) {
+          const c = data.copies;
+          // Instagram
+          const igTags = (c.instagram?.hashtags || []).join(' ');
+          document.getElementById('copy-instagram').value = `${c.instagram?.caption || ''}\n\n${igTags}`;
+          // TikTok
+          const ttTags = (c.tiktok?.hashtags || []).join(' ');
+          document.getElementById('copy-tiktok').value = `${c.tiktok?.caption || ''} ${ttTags}`;
+          // Kwai
+          const kwTags = (c.kwai?.hashtags || []).join(' ');
+          document.getElementById('copy-kwai').value = `${c.kwai?.caption || ''} ${kwTags}`;
+          // Telegram
+          document.getElementById('copy-telegram').value = c.whatsapp_telegram?.message || '';
+          // WhatsApp
+          document.getElementById('copy-whatsapp').value = c.whatsapp_telegram?.message || '';
+          // Facebook
+          document.getElementById('copy-facebook').value = `${c.facebook?.title || ''}\n\n${c.facebook?.caption || ''}`;
+        }
+      } catch (err) {
+        alert('Erro ao gerar copys: ' + err.message);
+      } finally {
+        btn.innerHTML = `<i data-lucide="wand-2" class="w-4 h-4"></i> Gerar Copys com IA para Todas as Redes`;
+        btn.disabled = false;
+        updateIcons();
+      }
+    }
+
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).value;
+      navigator.clipboard.writeText(text);
+      alert('Texto copiado para a área de transferência!');
+    }
+
+    function shareDirectWhatsApp() {
+      const text = document.getElementById('copy-whatsapp').value || document.getElementById('full-script-text').value;
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
+    function shareDirectTelegram() {
+      const text = document.getElementById('copy-telegram').value || document.getElementById('full-script-text').value;
+      const url = `https://t.me/share/url?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
+    async function shareNativeWebShare() {
+      const text = document.getElementById('copy-instagram').value || document.getElementById('full-script-text').value;
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'CloneStudio PT-BR Vídeo',
+            text: text,
+            url: window.location.href
+          });
+        } catch (e) {}
+      } else {
+        alert('Web Share não suportado neste navegador. Use o WhatsApp ou Telegram direto.');
+      }
+    }
+
+    async function sendTelegramDirect() {
+      if (!state.renderedVideoPath) return alert('Gere um vídeo primeiro na aba Timeline.');
+      const text = document.getElementById('copy-telegram').value;
+      try {
+        const res = await fetch('/api/social/telegram/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            video_path: state.renderedVideoPath,
+            caption: text
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          alert('Vídeo enviado com sucesso para o Telegram!');
+        } else {
+          alert('Erro Telegram: ' + (data.message || 'Verifique o bot token nas configurações.'));
+        }
+      } catch (e) {
+        alert('Erro: ' + e.message);
+      }
+    }
+
+    async function sendWhatsAppEvolution() {
+      if (!state.renderedVideoPath) return alert('Gere um vídeo primeiro na aba Timeline.');
+      const text = document.getElementById('copy-whatsapp').value;
+      const number = document.getElementById('whatsapp-dest-number').value.trim();
+      if (!number) return alert('Digite o número de WhatsApp de destino.');
+
+      try {
+        const res = await fetch('/api/social/whatsapp/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            video_path: state.renderedVideoPath,
+            caption: text,
+            recipient_number: number
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          alert('Vídeo enviado via WhatsApp Evolution API!');
+        } else {
+          alert('Erro WhatsApp: ' + (data.message || 'Verifique as configurações.'));
+        }
+      } catch (e) {
+        alert('Erro: ' + e.message);
+      }
+    }
+
+    async function publishInstagramReels() {
+      alert('Para publicação direta no Instagram Reels, o vídeo precisa estar hospedado em uma URL pública (ex: Cloudflare Tunnel ou S3). Use o botão "Copiar Texto" ou configure seu token Meta.');
+    }
+
+    async function publishTikTok() {
+      alert('Para publicação no TikTok, certifique-se de configurar seu TikTok Access Token na aba Configurações.');
+    }
+
+    async function publishKwai() {
+      alert('Para publicação no Kwai, configure seu Kwai Open Platform Token nas Configurações.');
+    }
+
+    async function publishFacebookReels() {
+      alert('Para publicação no Facebook Reels, configure seu token Meta Graph API nas Configurações.');
+    }
+
+    // Settings
+    function onLlmProviderChange() {
+      const prov = document.getElementById('llm-provider-select').value;
+      state.llmProvider = prov;
+      document.getElementById('copilot-llm-label').innerText = prov.toUpperCase();
+      
+      if (prov === 'deepseek') {
+        document.getElementById('llm-base-url').value = 'https://api.deepseek.com/v1';
+        document.getElementById('llm-model-name').value = 'deepseek-chat';
+      } else if (prov === 'maritaca') {
+        document.getElementById('llm-base-url').value = 'https://chat.maritaca.ai/api';
+        document.getElementById('llm-model-name').value = 'sabia-3';
+      } else if (prov === 'ollama') {
+        document.getElementById('llm-base-url').value = 'http://localhost:11434/v1';
+        document.getElementById('llm-model-name').value = 'qwen2.5:7b';
+      }
+    }
+
+    function saveLlmSettings() {
+      state.llmProvider = document.getElementById('llm-provider-select').value;
+      state.llmApiKey = document.getElementById('llm-api-key').value;
+      state.llmBaseUrl = document.getElementById('llm-base-url').value;
+      state.llmModel = document.getElementById('llm-model-name').value;
+      alert('Configurações de LLM salvas!');
+    }
+
+    async function saveSocialSettings() {
+      const cfg = {
+        telegram_bot_token: document.getElementById('cfg-tg-token').value.trim(),
+        telegram_chat_id: document.getElementById('cfg-tg-chat').value.trim(),
+        whatsapp_api_url: document.getElementById('cfg-wa-url').value.trim(),
+        whatsapp_api_key: document.getElementById('cfg-wa-key').value.trim(),
+        whatsapp_instance: document.getElementById('cfg-wa-instance').value.trim(),
+        meta_access_token: document.getElementById('cfg-meta-token').value.trim()
+      };
+      await fetch('/api/social/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cfg)
+      });
+      alert('Credenciais de redes salvas com sucesso!');
+    }
+
+    async function loadSocialSettings() {
+      try {
+        const res = await fetch('/api/social/config');
+        const cfg = await res.json();
+        if (cfg.telegram_bot_token) document.getElementById('cfg-tg-token').value = cfg.telegram_bot_token;
+        if (cfg.telegram_chat_id) document.getElementById('cfg-tg-chat').value = cfg.telegram_chat_id;
+        if (cfg.whatsapp_api_url) document.getElementById('cfg-wa-url').value = cfg.whatsapp_api_url;
+        if (cfg.whatsapp_api_key) document.getElementById('cfg-wa-key').value = cfg.whatsapp_api_key;
+        if (cfg.whatsapp_instance) document.getElementById('cfg-wa-instance').value = cfg.whatsapp_instance;
+        if (cfg.meta_access_token) document.getElementById('cfg-meta-token').value = cfg.meta_access_token;
+      } catch (e) {}
+    }
+
+    async function handleTestWorker() {
+      const url = document.getElementById('worker-url-input').value.trim();
+      const token = document.getElementById('worker-token-input').value.trim();
+      const resSpan = document.getElementById('worker-test-result');
+
+      if (!url) return alert('Informe a URL do Worker.');
+      resSpan.innerText = 'Testando...';
+
+      try {
+        const res = await fetch('/api/render/test-worker', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ worker_url: url, token: token })
+        });
+        const data = await res.json();
+        if (data.status === 'online') {
+          state.workerUrl = url;
+          state.workerToken = token;
+          resSpan.innerHTML = `<span class="text-green-400 font-bold">✓ Online: ${data.details.gpu || 'GPU Conectada'}</span>`;
+          document.getElementById('worker-status-text').innerText = 'Worker: Conectado';
+          document.getElementById('worker-status-badge').querySelector('span').className = 'w-2 h-2 rounded-full bg-green-400';
+        } else {
+          resSpan.innerHTML = `<span class="text-red-400">✗ Offline: ${data.message}</span>`;
+        }
+      } catch (err) {
+        resSpan.innerHTML = `<span class="text-red-400">✗ Erro: ${err.message}</span>`;
+      }
+    }
+
+    document.getElementById('bgm-volume-slider').addEventListener('input', (e) => {
+      document.getElementById('bgm-volume-val').innerText = `${Math.round(e.target.value * 100)}%`;
+    });
+
+    // Startup
+    window.addEventListener('DOMContentLoaded', () => {
+      updateIcons();
+      loadClones();
+      loadSubtitleStyles();
+      renderTimelineLayers();
+      loadSocialSettings();
+    });
+  </script>
+</body>
+</html>

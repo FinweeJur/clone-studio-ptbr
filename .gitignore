@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Dados locais e vídeos gerados (privacidade do usuário)
+backend/data/uploads/*
+!backend/data/uploads/.gitkeep
+backend/data/outputs/*
+!backend/data/outputs/.gitkeep
+backend/data/exports/*
+!backend/data/exports/.gitkeep
+backend/data/clones/*
+!backend/data/clones/.gitkeep
+backend/data/social_config.json
+
+# Logs e arquivos de sistema
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+.env
+.env.local

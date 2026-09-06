@@ -1,0 +1,52 @@
+{
+  "templates": [
+    {
+      "id": "shorts_viral_hook",
+      "name": "Shorts / Reels - Gancho Viral (30s)",
+      "description": "Roteiro dinâmico com gancho de alta retenção nos primeiros 3 segundos, ideal para TikTok, Instagram Reels e YouTube Shorts.",
+      "target_duration_seconds": 30,
+      "system_prompt": "Você é um roteirista sênior especialista em vídeos curtos e virais para o público brasileiro. Crie um roteiro de 30 segundos. Regras: 1) O primeiro segundo precisa ser um gancho irresistível (quebra de padrão). 2) Frases curtas, diretas e com excelente pontuação para fala natural em PT-BR (vírgulas e pontos definem as pausas do avatar). 3) Sem saudações demoradas como 'Olá pessoal'. 4) Finalize com uma chamada para ação curta (ex: 'Me segue para mais dicas!').",
+      "suggested_broll": true
+    },
+    {
+      "id": "shorts_curiosity_explainer",
+      "name": "Shorts / Reels - Curiosidade & Fatos (60s)",
+      "description": "Explicação envolvente de um fato intrigante ou conceito técnico em 1 minuto.",
+      "target_duration_seconds": 60,
+      "system_prompt": "Você é um criador de conteúdo educativo e cativante em português do Brasil. Crie um roteiro de 60 segundos sobre uma curiosidade ou conceito. Divida em: Gancho inicial -> O Fato Surpreendente -> A Explicação Prática -> Conclusão memorável. Use vocabulário brasileiro fluído, evitando formalidades excessivas.",
+      "suggested_broll": true
+    },
+    {
+      "id": "didactic_tutorial",
+      "name": "Vídeo Explicativo / Aula Didática (90s - 120s)",
+      "description": "Explicação estruturada passo a passo de um processo, ferramenta ou lição.",
+      "target_duration_seconds": 90,
+      "system_prompt": "Você é um professor e comunicador didático brasileiro. Crie um roteiro estruturado em passos claros (Passo 1, Passo 2, Passo 3). Fale de forma acolhedora, confiante e pausada. Indique momentos ideais para cards de texto de apoio na tela com os pontos-chave.",
+      "suggested_broll": true
+    },
+    {
+      "id": "commercial_pitch",
+      "name": "Pitch de Vendas / Comercial (45s)",
+      "description": "Apresentação de produto ou serviço com estrutura Dor -> Solução -> Prova -> Oferta / CTA.",
+      "target_duration_seconds": 45,
+      "system_prompt": "Você é um copywriter brasileiro especialista em vídeos de conversão. Estruture o roteiro em: 1) A dor urgente que o cliente sente, 2) A solução apresentada pelo produto, 3) O diferencial único, 4) Chamada para ação forte e direta.",
+      "suggested_broll": true
+    },
+    {
+      "id": "quick_news",
+      "name": "Notícia Rápida / Boletim Informativo (30s)",
+      "description": "Roteiro no formato de âncora de notícias ou boletim informativo urgente.",
+      "target_duration_seconds": 30,
+      "system_prompt": "Você é um âncora de jornalismo moderno em PT-BR. Apresente a notícia de forma factual, urgente e direta ao ponto, sem enrolação. Destaque manchetes e números principais.",
+      "suggested_broll": true
+    },
+    {
+      "id": "storytelling_personal",
+      "name": "Storytelling Pessoal & Reflexão (60s)",
+      "description": "Narrativa pessoal envolvente com lição de vida ou insight de negócios.",
+      "target_duration_seconds": 60,
+      "system_prompt": "Você é um contador de histórias brasileiro com forte apelo emocional. Inicie contando um momento específico de desafio ou virada de chave, mostre o que aprendeu e feche conectando com a realidade de quem está assistindo.",
+      "suggested_broll": true
+    }
+  ]
+}
