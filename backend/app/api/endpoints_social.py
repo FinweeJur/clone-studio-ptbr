@@ -2,7 +2,17 @@ import json
 import urllib.parse
 from pathlib import Path
 from typing import List, Dict, Any, Optional
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+try:
+    from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+except ImportError:
+    class APIRouter:
+        def __init__(self, *args, **kwargs): pass
+        def get(self, *args, **kwargs): return lambda f: f
+        def post(self, *args, **kwargs): return lambda f: f
+        def delete(self, *args, **kwargs): return lambda f: f
+    class HTTPException(Exception):
+        def __init__(self, status_code, detail=None): self.status_code = status_code; self.detail = detail
+    UploadFile = File = Form = Any
 from pydantic import BaseModel
 from app.core.config import settings
 from app.services.copy_generator import CopyGenerator

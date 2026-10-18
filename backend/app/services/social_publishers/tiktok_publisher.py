@@ -1,4 +1,7 @@
-import httpx
+try:
+    import httpx
+except ImportError:
+    httpx = None
 from pathlib import Path
 from typing import Dict, Any, Optional
 

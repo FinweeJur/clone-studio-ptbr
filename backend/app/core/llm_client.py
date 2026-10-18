@@ -1,6 +1,9 @@
 import json
 from typing import List, Dict, Any, Optional, AsyncGenerator
-from openai import AsyncOpenAI
+try:
+    from openai import AsyncOpenAI
+except ImportError:
+    AsyncOpenAI = None
 from app.core.config import settings
 
 class UnifiedLLMClient:
