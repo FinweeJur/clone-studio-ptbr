@@ -19,6 +19,8 @@ backend/data/exports/*
 backend/data/clones/*
 !backend/data/clones/.gitkeep
 backend/data/social_config.json
+backend/data/connections_config.json
+
 
 # Logs e arquivos de sistema
 *.log

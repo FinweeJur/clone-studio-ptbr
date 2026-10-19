@@ -8,11 +8,11 @@ from app.core.config import settings
 
 class UnifiedLLMClient:
     """
-    Cliente unificado para conexão com LLMs compatíveis com a API OpenAI:
-    - Maritaca AI (MariTalk / Sabiá-3, Sabiá-2)
+    Cliente unificado para conexão com LLMs:
     - DeepSeek (DeepSeek-V3 / DeepSeek-R1 / DeepSeek-Chat)
+    - Maritaca AI (MariTalk / Sabiá-3, Sabiá-2 - IA Brasileira)
     - Ollama Local ou Remoto (Llama 3, Qwen 2.5, Mistral)
-    - Provedor Customizado (OpenRouter, Groq, vLLM, etc.)
+    - Servidor Customizado Privado (vLLM, LM Studio, LocalAI)
     """
 
     @staticmethod
@@ -45,10 +45,10 @@ class UnifiedLLMClient:
             client = AsyncOpenAI(api_key=key, base_url=url)
             return client, model
             
-        else:  # custom / openai
+        else:  # custom (vLLM, LM Studio, LocalAI)
             key = api_key or settings.CUSTOM_API_KEY or "none"
-            url = base_url or settings.CUSTOM_API_URL or "https://api.openai.com/v1"
-            model = settings.CUSTOM_MODEL or "gpt-4o-mini"
+            url = base_url or settings.CUSTOM_API_URL or "http://localhost:1234/v1"
+            model = settings.CUSTOM_MODEL or "custom-model"
             client = AsyncOpenAI(api_key=key, base_url=url)
             return client, model
 

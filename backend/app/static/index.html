@@ -51,7 +51,13 @@
 
     <!-- Main Navigation Tabs -->
     <nav class="flex items-center gap-1 bg-gray-950/60 p-1 rounded-xl border border-gray-800">
-      <button onclick="switchTab('clones')" id="tab-btn-clones" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 bg-indigo-600 text-white">
+      <button onclick="switchTab('express')" id="tab-btn-express" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-bold transition flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-orange-500/20">
+        <i data-lucide="zap" class="w-4 h-4 fill-white"></i> Modo Rápido (3 Passos)
+      </button>
+      <button onclick="switchTab('radar')" id="tab-btn-radar" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-gray-400 hover:text-white">
+        <i data-lucide="compass" class="w-4 h-4 text-amber-400"></i> Radar & Tendências
+      </button>
+      <button onclick="switchTab('clones')" id="tab-btn-clones" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-gray-400 hover:text-white">
         <i data-lucide="users" class="w-4 h-4"></i> Meus Clones
       </button>
       <button onclick="switchTab('script')" id="tab-btn-script" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-gray-400 hover:text-white">
@@ -63,28 +69,214 @@
       <button onclick="switchTab('social')" id="tab-btn-social" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-gray-400 hover:text-white">
         <i data-lucide="share-2" class="w-4 h-4 text-pink-400"></i> Publicar & Distribuir
       </button>
-      <button onclick="switchTab('radar')" id="tab-btn-radar" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-gray-400 hover:text-white">
-        <i data-lucide="compass" class="w-4 h-4 text-amber-400"></i> Radar & Tendências
-      </button>
-      <button onclick="switchTab('settings')" id="tab-btn-settings" class="tab-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-gray-400 hover:text-white">
-        <i data-lucide="settings" class="w-4 h-4"></i> Configurações
-      </button>
     </nav>
 
-    <!-- Quick Status Badge -->
-    <div class="flex items-center gap-3">
-      <div id="worker-status-badge" class="flex items-center gap-2 text-xs px-3 py-1.5 rounded-full bg-gray-800 text-gray-300 border border-gray-700">
-        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-        <span id="worker-status-text">Worker: Local (Leve)</span>
+    <!-- Quick Status Badge & Hub de Conexões Button -->
+    <div class="flex items-center gap-2.5">
+      <div id="hw-status-badge" onclick="openConnectionsModal('hardware')" title="Clique para ver o diagnóstico de hardware" class="cursor-pointer flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-gray-900 border border-gray-800 text-gray-300 hover:border-gray-700 transition">
+        <i data-lucide="cpu" class="w-3.5 h-3.5 text-indigo-400"></i>
+        <span id="hw-status-text">PC Leve</span>
       </div>
+      <button onclick="openConnectionsModal()" class="px-3.5 py-1.5 bg-gradient-to-r from-indigo-600/30 to-purple-600/30 hover:from-indigo-600/50 hover:to-purple-600/50 text-indigo-300 border border-indigo-500/40 rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-indigo-600/10 transition">
+        <i data-lucide="sliders" class="w-4 h-4 text-indigo-400"></i> Conexões & Chaves
+        <span id="active-connections-pill" class="px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">Configurar</span>
+      </button>
     </div>
   </header>
 
   <!-- Main Container -->
   <main class="flex-1 p-6 max-w-7xl mx-auto w-full">
 
+    <!-- ==================== TAB 0: MODO RÁPIDO (3 PASSOS) ==================== -->
+    <section id="tab-express" class="tab-content space-y-6">
+      
+      <!-- Banner de Boas-Vindas com Piloto Automático -->
+      <div class="bg-gradient-to-r from-gray-900 via-indigo-950/30 to-purple-950/30 border border-indigo-500/30 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl shadow-indigo-950/20">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold text-xs flex items-center gap-1 border border-amber-500/30">
+              <i data-lucide="zap" class="w-3.5 h-3.5 fill-amber-300"></i> Piloto Automático 1-Clique
+            </span>
+            <span class="text-xs text-gray-400">• Do Gancho à Postagem em 3 Passos</span>
+          </div>
+          <h2 class="text-xl font-bold text-white">Criador Rápido de Vídeos Virais</h2>
+          <p class="text-xs text-gray-300 max-w-2xl">
+            Escolha seu avatar, selecione o nicho ou gancho em alta no Brasil e deixe a IA gerar o roteiro estruturado em 4 atos, legenda dinâmica e capas para redes em segundos.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="switchTab('radar')" class="px-3.5 py-2 bg-gray-900 hover:bg-gray-800 text-amber-400 border border-amber-500/30 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+            <i data-lucide="compass" class="w-4 h-4"></i> Ver Top 10 Perfis no Radar
+          </button>
+        </div>
+      </div>
+
+      <!-- 3 Steps Interactive Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- STEP 1 & 2: INPUTS (5 Cols) -->
+        <div class="lg:col-span-5 space-y-5">
+          
+          <!-- Passo 1: Seleção de Clone -->
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[11px]">1</span>
+                Seu Clone / Avatar Digital
+              </span>
+              <button onclick="openNewCloneModal()" class="text-[11px] text-gray-400 hover:text-indigo-400 transition flex items-center gap-1">
+                <i data-lucide="plus" class="w-3 h-3"></i> Criar Novo
+              </button>
+            </div>
+            
+            <div id="express-clones-selector" class="grid grid-cols-2 gap-2.5">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+
+          <!-- Passo 2: Nicho, Gancho e Assunto -->
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4">
+            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[11px]">2</span>
+              Nicho & Gancho de Retenção
+            </span>
+
+            <div class="space-y-1.5">
+              <label class="text-[11px] font-semibold text-gray-300 uppercase">Categoria / Nicho</label>
+              <select id="express-niche-select" onchange="onExpressNicheChange()" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-xs text-gray-200 focus:border-amber-500 focus:outline-none">
+                <option value="advocacia">⚖️ Advocacia / Jurídico (Trabalhista, Consumidor)</option>
+                <option value="politica">🏛️ Política & Cidadania (Projetos, Votações)</option>
+                <option value="tecnologia">💻 Tecnologia & IA (Produtividade, Ferramentas)</option>
+                <option value="educacao">📚 Conteúdos Educacionais (Aulas, Concursos)</option>
+                <option value="publicidade">📢 Publicidade & Marketing (Tráfego, Vendas)</option>
+                <option value="financas">💰 Finanças & Investimentos (Economia, MEI)</option>
+                <option value="saude">🩺 Saúde & Bem-estar (Medicina, Nutrição)</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between">
+                <label class="text-[11px] font-semibold text-gray-300 uppercase">Gancho Viral dos 3 Primeiros Segundos</label>
+                <button onclick="cycleExpressHook()" class="text-[10px] text-amber-400 hover:underline flex items-center gap-1">
+                  <i data-lucide="refresh-cw" class="w-3 h-3"></i> Sortear Outro
+                </button>
+              </div>
+              <textarea id="express-hook-input" rows="2" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-xs text-gray-200 focus:border-amber-500 focus:outline-none resize-none leading-relaxed" placeholder="Se o seu chefe te disse isso hoje, você tem direito a receber tudo!"></textarea>
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-[11px] font-semibold text-gray-300 uppercase">Assunto / Dica Central</label>
+              <input id="express-topic-input" type="text" placeholder="Ex: O que fazer na demissão sem justa causa" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-xs text-gray-200 focus:border-amber-500 focus:outline-none">
+            </div>
+
+            <!-- Provedor LLM Compacto (DeepSeek, Maritaca AI, Ollama, Servidor Custom) -->
+            <div class="pt-2 border-t border-gray-800 flex items-center justify-between text-xs text-gray-400">
+              <span class="flex items-center gap-1">
+                <i data-lucide="cpu" class="w-3.5 h-3.5 text-indigo-400"></i> Motor de IA:
+              </span>
+              <select id="express-llm-select" class="bg-gray-950 border border-gray-800 rounded-lg px-2 py-1 text-xs text-gray-300 focus:outline-none">
+                <option value="deepseek">DeepSeek (V3 / R1)</option>
+                <option value="maritaca">Maritaca AI (Sabiá-3 BR)</option>
+                <option value="ollama">Ollama (Local / Offline)</option>
+                <option value="custom">Servidor Customizado</option>
+              </select>
+            </div>
+
+            <!-- Botão Gigante de Execução 1-Clique -->
+            <button onclick="handleExecuteExpress()" id="btn-execute-express" class="w-full py-3.5 bg-gradient-to-r from-amber-500 via-orange-600 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-xl shadow-orange-600/25 transition">
+              <i data-lucide="sparkles" class="w-4 h-4 fill-white"></i> Criar Vídeo & Roteiro em 1 Clique
+            </button>
+          </div>
+
+        </div>
+
+        <!-- STEP 3: OUTPUT / RESULTADO INSTANTÂNEO (7 Cols) -->
+        <div class="lg:col-span-7 bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4 flex flex-col justify-between">
+          
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[11px]">3</span>
+                Resultado Pronto para Prévia & Publicação
+              </span>
+              <div id="express-score-badge" class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold flex items-center gap-1">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Score: <span id="express-score-val">85/100</span>
+              </div>
+            </div>
+
+            <!-- Capa & Desconstrução Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+              <!-- Capa Vertical 9:16 Preview (4 Cols) -->
+              <div class="md:col-span-4 bg-gray-950 border border-gray-800 rounded-xl p-3 flex flex-col items-center justify-center text-center space-y-2 min-h-[220px]">
+                <div id="express-cover-box" class="w-full h-44 rounded-lg bg-gray-900 border border-gray-800 flex flex-col items-center justify-center text-gray-500 relative overflow-hidden">
+                  <img id="express-cover-img" src="" class="hidden w-full h-full object-cover rounded-lg">
+                  <div id="express-cover-placeholder" class="p-3 text-center space-y-1">
+                    <i data-lucide="image" class="w-6 h-6 mx-auto text-gray-600"></i>
+                    <p class="text-[10px] text-gray-400">Capa do Reels (9:16) gerada com gancho em destaque</p>
+                  </div>
+                </div>
+                <a id="express-cover-download" href="#" download="capa_reels.jpg" class="hidden text-[11px] text-indigo-400 hover:underline flex items-center gap-1">
+                  <i data-lucide="download" class="w-3 h-3"></i> Baixar Capa 9:16
+                </a>
+              </div>
+
+              <!-- Roteiro em 4 Atos Compacto (8 Cols) -->
+              <div class="md:col-span-8 space-y-2 text-xs">
+                <div class="p-2.5 bg-gray-950 border border-gray-800/80 rounded-lg">
+                  <span class="font-bold text-amber-400 text-[11px]">Ato 1 (0-3s): Gancho Viral</span>
+                  <p id="express-act-1" class="text-gray-200 text-xs italic mt-0.5">Selecione o nicho e clique no botão para gerar o roteiro estruturado.</p>
+                </div>
+                <div class="p-2.5 bg-gray-950 border border-gray-800/80 rounded-lg">
+                  <span class="font-bold text-blue-400 text-[11px]">Ato 2 (3-15s): Retenção & Contexto</span>
+                  <p id="express-act-2" class="text-gray-300 text-xs mt-0.5">Apresentação rápida do tema sem enrolação para evitar rolagem.</p>
+                </div>
+                <div class="p-2.5 bg-gray-950 border border-gray-800/80 rounded-lg">
+                  <span class="font-bold text-emerald-400 text-[11px]">Ato 3 (15-28s): Momento Aha!</span>
+                  <p id="express-act-3" class="text-gray-300 text-xs mt-0.5">A solução prática e regra de ouro que gera salvamentos e compartilhamentos.</p>
+                </div>
+                <div class="p-2.5 bg-gray-950 border border-gray-800/80 rounded-lg">
+                  <span class="font-bold text-purple-400 text-[11px]">Ato 4 (28-35s): Loop Infinito & CTA</span>
+                  <p id="express-act-4" class="text-gray-300 text-xs mt-0.5">Conexão imperceptível com a primeira frase (Retenção 100%+).</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botões de Compartilhamento e Disparo 1-Clique -->
+            <div class="pt-3 border-t border-gray-800 space-y-2">
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Disparo & Compartilhamento Imediato (1 Clique):</span>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                <a id="express-wa-share" href="#" target="_blank" class="py-2.5 px-2 bg-emerald-950/60 border border-emerald-800/60 hover:bg-emerald-900/60 text-emerald-300 rounded-xl font-bold flex items-center justify-center gap-1.5 transition">
+                  <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> WhatsApp
+                </a>
+                <a id="express-tg-share" href="#" target="_blank" class="py-2.5 px-2 bg-sky-950/60 border border-sky-800/60 hover:bg-sky-900/60 text-sky-300 rounded-xl font-bold flex items-center justify-center gap-1.5 transition">
+                  <i data-lucide="send" class="w-3.5 h-3.5"></i> Telegram
+                </a>
+                <button onclick="goToSocialTabWithExpress()" class="py-2.5 px-2 bg-pink-950/60 border border-pink-800/60 hover:bg-pink-900/60 text-pink-300 rounded-xl font-bold flex items-center justify-center gap-1.5 transition">
+                  <i data-lucide="instagram" class="w-3.5 h-3.5"></i> Reels & FB
+                </button>
+                <button onclick="goToSocialTabWithExpress()" class="py-2.5 px-2 bg-cyan-950/60 border border-cyan-800/60 hover:bg-cyan-900/60 text-cyan-300 rounded-xl font-bold flex items-center justify-center gap-1.5 transition">
+                  <i data-lucide="music-2" class="w-3.5 h-3.5"></i> TikTok
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-800/60">
+            <span>Quer personalizar cada corte e camada de B-Roll?</span>
+            <button onclick="switchTab('timeline')" class="text-indigo-400 hover:underline flex items-center gap-1">
+              Abrir Estúdio Completo & Timeline <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
     <!-- ==================== TAB 1: MEUS CLONES ==================== -->
-    <section id="tab-clones" class="tab-content space-y-6">
+    <section id="tab-clones" class="tab-content hidden space-y-6">
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-xl font-bold text-white">Perfis de Avatares e Vozes</h2>
@@ -907,6 +1099,259 @@
     </div>
   </div>
 
+  <!-- ==================== MODAL: HUB UNIFICADO DE CONEXÕES & CHAVES ==================== -->
+  <div id="connections-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-gray-800 rounded-3xl max-w-3xl w-full p-6 space-y-6 shadow-2xl shadow-indigo-950/40 max-h-[90vh] overflow-y-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+            <i data-lucide="sliders" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              Hub de Conexões & Integrações
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-bold">1-Clique Test</span>
+            </h3>
+            <p class="text-xs text-gray-400">Valide suas APIs em tempo real sem poluir a tela principal.</p>
+          </div>
+        </div>
+        <button onclick="closeConnectionsModal()" class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-gray-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Category Tabs -->
+      <div class="flex flex-wrap gap-1 bg-gray-950 p-1.5 rounded-2xl border border-gray-800 text-xs">
+        <button onclick="switchConnTab('llm')" id="conn-tab-llm" class="conn-tab-btn px-3 py-2 rounded-xl font-bold flex items-center gap-1.5 bg-indigo-600 text-white transition">
+          <i data-lucide="cpu" class="w-3.5 h-3.5"></i> IA & Roteiros
+        </button>
+        <button onclick="switchConnTab('whatsapp')" id="conn-tab-whatsapp" class="conn-tab-btn px-3 py-2 rounded-xl font-medium text-gray-400 hover:text-white flex items-center gap-1.5 transition">
+          <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-400"></i> WhatsApp
+        </button>
+        <button onclick="switchConnTab('meta')" id="conn-tab-meta" class="conn-tab-btn px-3 py-2 rounded-xl font-medium text-gray-400 hover:text-white flex items-center gap-1.5 transition">
+          <i data-lucide="instagram" class="w-3.5 h-3.5 text-pink-400"></i> Meta (Insta & FB)
+        </button>
+        <button onclick="switchConnTab('telegram')" id="conn-tab-telegram" class="conn-tab-btn px-3 py-2 rounded-xl font-medium text-gray-400 hover:text-white flex items-center gap-1.5 transition">
+          <i data-lucide="send" class="w-3.5 h-3.5 text-sky-400"></i> Telegram
+        </button>
+        <button onclick="switchConnTab('hardware')" id="conn-tab-hardware" class="conn-tab-btn px-3 py-2 rounded-xl font-medium text-gray-400 hover:text-white flex items-center gap-1.5 transition">
+          <i data-lucide="laptop" class="w-3.5 h-3.5 text-amber-400"></i> Diagnóstico PC
+        </button>
+      </div>
+
+      <!-- TAB 1: LLMs (DeepSeek, Maritaca AI, Ollama, Servidor Custom) -->
+      <div id="conn-panel-llm" class="conn-panel space-y-4">
+        
+        <!-- Preset Cards -->
+        <div class="space-y-2">
+          <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Escolha um Provedor para Preencher Automaticamente:</label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button onclick="applyLlmPreset('deepseek')" class="p-3 bg-gray-950 border border-gray-800 hover:border-indigo-500 rounded-xl text-left transition group">
+              <span class="text-xs font-bold text-white group-hover:text-indigo-400 flex items-center gap-1">🐳 DeepSeek</span>
+              <span class="text-[10px] text-gray-400 block mt-0.5">V3 / R1 (Rápido)</span>
+            </button>
+            <button onclick="applyLlmPreset('maritaca')" class="p-3 bg-gray-950 border border-gray-800 hover:border-indigo-500 rounded-xl text-left transition group">
+              <span class="text-xs font-bold text-white group-hover:text-emerald-400 flex items-center gap-1">🦜 Maritaca AI</span>
+              <span class="text-[10px] text-gray-400 block mt-0.5">Sabiá-3 (100% BR)</span>
+            </button>
+            <button onclick="applyLlmPreset('ollama')" class="p-3 bg-gray-950 border border-gray-800 hover:border-indigo-500 rounded-xl text-left transition group">
+              <span class="text-xs font-bold text-white group-hover:text-amber-400 flex items-center gap-1">🦙 Ollama</span>
+              <span class="text-[10px] text-gray-400 block mt-0.5">Local & Offline</span>
+            </button>
+            <button onclick="applyLlmPreset('custom')" class="p-3 bg-gray-950 border border-gray-800 hover:border-indigo-500 rounded-xl text-left transition group">
+              <span class="text-xs font-bold text-white group-hover:text-purple-400 flex items-center gap-1">🔌 Servidor Local</span>
+              <span class="text-[10px] text-gray-400 block mt-0.5">vLLM / LM Studio</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="space-y-1">
+            <label class="font-semibold text-gray-300">Provedor Ativo</label>
+            <input id="conn-llm-prov" type="text" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 font-mono text-gray-200" readonly>
+          </div>
+          <div class="space-y-1">
+            <label class="font-semibold text-gray-300">Nome do Modelo</label>
+            <input id="conn-llm-model" type="text" placeholder="deepseek-chat" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-gray-200 focus:border-indigo-500 focus:outline-none">
+          </div>
+          <div class="md:col-span-2 space-y-1">
+            <label class="font-semibold text-gray-300">Chave de API (API Key)</label>
+            <input id="conn-llm-key" type="password" placeholder="sk-..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-gray-200 focus:border-indigo-500 focus:outline-none">
+          </div>
+          <div class="md:col-span-2 space-y-1">
+            <label class="font-semibold text-gray-300">URL Base da API (Endpoint)</label>
+            <input id="conn-llm-url" type="text" placeholder="https://api.deepseek.com/v1" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 font-mono text-gray-200 focus:border-indigo-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <button onclick="handleTestLlmConnection()" id="btn-test-llm" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition">
+            <i data-lucide="zap" class="w-4 h-4"></i> Testar Conexão Instantânea
+          </button>
+          <span id="conn-llm-feedback" class="text-xs text-gray-400"></span>
+        </div>
+      </div>
+
+      <!-- TAB 2: WhatsApp (Cloud Oficial & Evolution Open Source) -->
+      <div id="conn-panel-whatsapp" class="conn-panel hidden space-y-4">
+        
+        <div class="flex items-center gap-3 border-b border-gray-800 pb-3">
+          <label class="text-xs font-bold text-gray-300">Modo WhatsApp:</label>
+          <div class="flex items-center gap-2">
+            <button onclick="setWhatsAppMode('cloud')" id="btn-wa-mode-cloud" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white transition">
+              Meta Cloud API (Oficial)
+            </button>
+            <button onclick="setWhatsAppMode('evolution')" id="btn-wa-mode-evolution" class="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-400 hover:text-white bg-gray-950 border border-gray-800 transition">
+              Evolution API (Open Source QR Code)
+            </button>
+          </div>
+        </div>
+
+        <!-- Form WhatsApp Cloud Oficial -->
+        <div id="wa-cloud-form" class="space-y-3 text-xs">
+          <div class="p-3 bg-emerald-950/20 border border-emerald-500/20 rounded-xl text-emerald-300 text-[11px] leading-relaxed">
+            <strong>Oficial Meta:</strong> Envio corporativo seguro direto pelos servidores da Meta. Obtenha no Meta for Developers > WhatsApp > API Setup.
+          </div>
+          <div class="space-y-1">
+            <label class="font-semibold text-gray-300">Phone Number ID</label>
+            <input id="conn-wa-cloud-phoneid" type="text" placeholder="Ex: 104592837482910" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 font-mono text-gray-200">
+          </div>
+          <div class="space-y-1">
+            <label class="font-semibold text-gray-300">Access Token Permanente (Meta System User)</label>
+            <input id="conn-wa-cloud-token" type="password" placeholder="EAAB..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-gray-200">
+          </div>
+          <button onclick="handleTestWhatsAppCloud()" id="btn-test-wa-cloud" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition">
+            <i data-lucide="check-circle" class="w-4 h-4"></i> Validar WhatsApp Cloud API
+          </button>
+          <span id="conn-wa-cloud-feedback" class="text-xs text-gray-400 block"></span>
+        </div>
+
+        <!-- Form Evolution API Open Source -->
+        <div id="wa-evolution-form" class="hidden space-y-3 text-xs">
+          <div class="p-3 bg-gray-950 border border-gray-800 rounded-xl text-gray-400 text-[11px] leading-relaxed flex items-center justify-between">
+            <span><strong>Open Source:</strong> Para conectar seu WhatsApp pessoal via QR Code na Evolution API.</span>
+            <button onclick="detectLocalEvolution()" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-emerald-400 rounded-lg text-[10px] font-bold transition">
+              🔍 Detectar Localhost
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="space-y-1">
+              <label class="font-semibold text-gray-300">URL da Evolution API</label>
+              <input id="conn-wa-evo-url" type="text" value="http://localhost:8080" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 font-mono text-gray-200">
+            </div>
+            <div class="space-y-1">
+              <label class="font-semibold text-gray-300">Chave de API (apikey)</label>
+              <input id="conn-wa-evo-key" type="password" placeholder="Chave da Evolution" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-gray-200">
+            </div>
+            <div class="space-y-1 md:col-span-2">
+              <label class="font-semibold text-gray-300">Nome da Instância</label>
+              <input id="conn-wa-evo-instance" type="text" placeholder="Ex: default ou minha_instancia" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-gray-200">
+            </div>
+          </div>
+          <button onclick="handleTestWhatsAppEvolution()" id="btn-test-wa-evo" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition">
+            <i data-lucide="check-circle" class="w-4 h-4"></i> Testar Conexão Evolution API
+          </button>
+          <span id="conn-wa-evo-feedback" class="text-xs text-gray-400 block"></span>
+        </div>
+
+      </div>
+
+      <!-- TAB 3: Meta Graph API (Auto-Descobrir Contas) -->
+      <div id="conn-panel-meta" class="conn-panel hidden space-y-4 text-xs">
+        <div class="p-3 bg-pink-950/20 border border-pink-500/20 rounded-xl text-pink-300 text-[11px] leading-relaxed">
+          Cole o seu Token de Acesso da Meta. O sistema vai <strong>descobrir automaticamente</strong> todas as contas do Instagram Reels e Páginas do Facebook vinculadas a você.
+        </div>
+        <div class="space-y-1">
+          <label class="font-semibold text-gray-300">Meta Access Token (Long-Lived)</label>
+          <input id="conn-meta-token" type="password" placeholder="EAAB..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-gray-200 focus:border-pink-500 focus:outline-none">
+        </div>
+        
+        <div class="flex items-center gap-3">
+          <button onclick="handleDiscoverMetaAccounts()" id="btn-discover-meta" class="px-4 py-2.5 bg-pink-600 hover:bg-pink-500 text-white rounded-xl font-bold flex items-center gap-2 transition">
+            <i data-lucide="search" class="w-4 h-4"></i> 🔍 Auto-Descobrir Minhas Contas
+          </button>
+          <span id="conn-meta-feedback" class="text-gray-400"></span>
+        </div>
+
+        <div id="meta-discovered-section" class="hidden space-y-3 pt-3 border-t border-gray-800">
+          <div class="space-y-1">
+            <label class="font-semibold text-pink-400">Conta do Instagram Selecionada para Publicação</label>
+            <select id="conn-meta-selected-ig" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-gray-200">
+              <!-- Auto-populated -->
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="font-semibold text-blue-400">Página do Facebook Selecionada</label>
+            <select id="conn-meta-selected-page" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-gray-200">
+              <!-- Auto-populated -->
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: Telegram Bot -->
+      <div id="conn-panel-telegram" class="conn-panel hidden space-y-4 text-xs">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="space-y-1 md:col-span-2">
+            <label class="font-semibold text-sky-400">Token do Bot (obtido com @BotFather)</label>
+            <input id="conn-tg-token" type="password" placeholder="123456:ABC-DEF..." class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 font-mono text-gray-200 focus:border-sky-500 focus:outline-none">
+          </div>
+          <div class="space-y-1 md:col-span-2">
+            <label class="font-semibold text-sky-400">Chat ID ou @Canal do Telegram</label>
+            <input id="conn-tg-chat" type="text" placeholder="@meu_canal ou -100123456789" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-gray-200 focus:border-sky-500 focus:outline-none">
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="handleTestTelegram()" id="btn-test-tg" class="px-4 py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl font-bold flex items-center gap-2 transition">
+            <i data-lucide="send" class="w-4 h-4"></i> Testar Bot do Telegram
+          </button>
+          <span id="conn-tg-feedback" class="text-gray-400"></span>
+        </div>
+      </div>
+
+      <!-- TAB 5: Diagnóstico do PC -->
+      <div id="conn-panel-hardware" class="conn-panel hidden space-y-4 text-xs">
+        <div class="p-4 bg-gray-950 border border-gray-800 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-white text-sm flex items-center gap-2">
+              <i data-lucide="cpu" class="w-4 h-4 text-indigo-400"></i> Hardware Detectado
+            </span>
+            <span id="hw-profile-badge" class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold text-[10px]">
+              PC Leve
+            </span>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-2 text-gray-300">
+            <div><strong>Sistema:</strong> <span id="hw-info-os">Windows</span></div>
+            <div><strong>Processador:</strong> <span id="hw-info-cpu">Detectando...</span></div>
+            <div><strong>GPU Dedicada:</strong> <span id="hw-info-gpu">Nenhuma</span></div>
+            <div><strong>VRAM:</strong> <span id="hw-info-vram">0 GB</span></div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-gray-900 border border-gray-800 text-indigo-300 text-[11px] leading-relaxed">
+            💡 <span id="hw-info-rec">Carregando recomendação para seu computador...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-between pt-4 border-t border-gray-800">
+        <button onclick="closeConnectionsModal()" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold transition">
+          Fechar
+        </button>
+        <button onclick="saveAllConnections()" id="btn-save-all-conn" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-indigo-600/25 transition">
+          <i data-lucide="save" class="w-4 h-4"></i> Salvar Todas as Conexões
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Container de Toasts Flutuantes -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
+
   <!-- App Javascript Logic -->
   <script>
     // State Store
@@ -1722,9 +2167,14 @@
             <div class="text-[10px] text-gray-500 line-clamp-1 mt-0.5">${p.key_strategy}</div>
           </td>
           <td class="py-3 px-3 text-right">
-            <button onclick="loadProfileToInspector(${p.rank})" class="px-2.5 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-[11px] font-bold transition flex items-center gap-1 ml-auto whitespace-nowrap shadow-sm">
-              <i data-lucide="scan" class="w-3 h-3"></i> Analisar Vídeo
-            </button>
+            <div class="flex items-center justify-end gap-1.5 ml-auto">
+              <button onclick="useHookInExpress('${p.best_hook.replace(/'/g, "\\'")}', '${p.key_strategy.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white rounded-lg text-[11px] font-bold transition flex items-center gap-1 shadow-sm whitespace-nowrap">
+                <i data-lucide="zap" class="w-3 h-3 fill-white"></i> Usar no Modo Rápido
+              </button>
+              <button onclick="loadProfileToInspector(${p.rank})" class="px-2.5 py-1.5 bg-purple-600/40 hover:bg-purple-600 border border-purple-500/40 text-purple-200 hover:text-white rounded-lg text-[11px] font-bold transition flex items-center gap-1 whitespace-nowrap">
+                <i data-lucide="scan" class="w-3 h-3"></i> Analisar Vídeo
+              </button>
+            </div>
           </td>
         </tr>
       `).join('');
@@ -1863,14 +2313,558 @@
       }
     }
 
+    // ==================== TOAST NOTIFICATIONS SYSTEM ====================
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `p-3.5 rounded-2xl shadow-xl border text-xs font-medium flex items-center gap-2.5 transition-all transform translate-y-2 opacity-0 pointer-events-auto ${
+        type === 'success' ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-200' :
+        type === 'error' ? 'bg-red-950/90 border-red-500/40 text-red-200' :
+        type === 'warning' ? 'bg-amber-950/90 border-amber-500/40 text-amber-200' :
+        'bg-gray-900/90 border-indigo-500/40 text-gray-200'
+      }`;
+
+      const iconName = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-triangle' : type === 'warning' ? 'alert-circle' : 'info';
+      toast.innerHTML = `<i data-lucide="${iconName}" class="w-4 h-4 shrink-0"></i> <span>${message}</span>`;
+      container.appendChild(toast);
+      updateIcons();
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 50);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // ==================== HUB DE CONEXÕES & MODAL LOGIC ====================
+    function openConnectionsModal(tab = 'llm') {
+      const modal = document.getElementById('connections-modal');
+      if (modal) modal.classList.remove('hidden');
+      switchConnTab(tab);
+      loadConnectionsStatus();
+    }
+
+    function closeConnectionsModal() {
+      const modal = document.getElementById('connections-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function switchConnTab(tabId) {
+      document.querySelectorAll('.conn-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.conn-tab-btn').forEach(b => {
+        b.classList.remove('bg-indigo-600', 'text-white', 'font-bold');
+        b.classList.add('text-gray-400');
+      });
+
+      const panel = document.getElementById(`conn-panel-${tabId}`);
+      const btn = document.getElementById(`conn-tab-${tabId}`);
+      if (panel) panel.classList.remove('hidden');
+      if (btn) {
+        btn.classList.add('bg-indigo-600', 'text-white', 'font-bold');
+        btn.classList.remove('text-gray-400');
+      }
+      updateIcons();
+    }
+
+    function applyLlmPreset(prov) {
+      const pInput = document.getElementById('conn-llm-prov');
+      const mInput = document.getElementById('conn-llm-model');
+      const uInput = document.getElementById('conn-llm-url');
+      const kInput = document.getElementById('conn-llm-key');
+
+      if (prov === 'deepseek') {
+        pInput.value = 'deepseek';
+        mInput.value = 'deepseek-chat';
+        uInput.value = 'https://api.deepseek.com/v1';
+        kInput.placeholder = 'sk-... (chave DeepSeek)';
+        showToast('Preset do DeepSeek aplicado!', 'info');
+      } else if (prov === 'maritaca') {
+        pInput.value = 'maritaca';
+        mInput.value = 'sabia-3';
+        uInput.value = 'https://chat.maritaca.ai/api';
+        kInput.placeholder = 'Chave da Maritaca AI (Unicamp)';
+        showToast('Preset da Maritaca AI (Sabiá-3 BR) aplicado!', 'info');
+      } else if (prov === 'ollama') {
+        pInput.value = 'ollama';
+        mInput.value = 'qwen2.5:7b';
+        uInput.value = 'http://localhost:11434/v1';
+        kInput.value = '';
+        kInput.placeholder = 'Opcional (Ollama local não exige chave)';
+        showToast('Preset do Ollama Local aplicado!', 'info');
+      } else {
+        pInput.value = 'custom';
+        mInput.value = 'custom-model';
+        uInput.value = 'http://localhost:1234/v1';
+        kInput.placeholder = 'Chave se exigida pelo servidor local';
+        showToast('Preset de Servidor Customizado aplicado!', 'info');
+      }
+    }
+
+    async function handleTestLlmConnection() {
+      const btn = document.getElementById('btn-test-llm');
+      const feedback = document.getElementById('conn-llm-feedback');
+      const prov = document.getElementById('conn-llm-prov').value.trim() || 'deepseek';
+      const key = document.getElementById('conn-llm-key').value.trim();
+      const url = document.getElementById('conn-llm-url').value.trim();
+      const model = document.getElementById('conn-llm-model').value.trim();
+
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Testando ping...`;
+      feedback.innerHTML = `<span class="text-gray-400">Enviando requisição...</span>`;
+      updateIcons();
+
+      try {
+        const res = await fetch('/api/connections/test-llm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ provider: prov, api_key: key, base_url: url, model })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          feedback.innerHTML = `<span class="text-emerald-400 font-bold">🟢 ${data.message} (${data.latency_ms}ms)</span>`;
+          showToast(`Conexão com ${prov} OK! Ping: ${data.latency_ms}ms`, 'success');
+        } else {
+          feedback.innerHTML = `<span class="text-red-400 font-semibold">🔴 ${data.message}</span>`;
+          showToast(data.message, 'error');
+        }
+      } catch (err) {
+        feedback.innerHTML = `<span class="text-red-400">Erro: ${err.message}</span>`;
+        showToast('Erro ao testar conexão: ' + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i> Testar Conexão Instantânea`;
+        updateIcons();
+      }
+    }
+
+    function setWhatsAppMode(mode) {
+      const cloudBtn = document.getElementById('btn-wa-mode-cloud');
+      const evoBtn = document.getElementById('btn-wa-mode-evolution');
+      const cloudForm = document.getElementById('wa-cloud-form');
+      const evoForm = document.getElementById('wa-evolution-form');
+
+      if (mode === 'cloud') {
+        cloudBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white transition';
+        evoBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-gray-400 hover:text-white bg-gray-950 border border-gray-800 transition';
+        cloudForm.classList.remove('hidden');
+        evoForm.classList.add('hidden');
+      } else {
+        evoBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white transition';
+        cloudBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-gray-400 hover:text-white bg-gray-950 border border-gray-800 transition';
+        evoForm.classList.remove('hidden');
+        cloudForm.classList.add('hidden');
+      }
+    }
+
+    async function handleTestWhatsAppCloud() {
+      const phoneId = document.getElementById('conn-wa-cloud-phoneid').value.trim();
+      const token = document.getElementById('conn-wa-cloud-token').value.trim();
+      const feedback = document.getElementById('conn-wa-cloud-feedback');
+
+      if (!phoneId || !token) return showToast('Preencha Phone Number ID e Token!', 'warning');
+
+      feedback.innerHTML = `<span class="text-gray-400">Validando com a Meta Cloud API...</span>`;
+      try {
+        const res = await fetch('/api/connections/test-whatsapp-cloud', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone_number_id: phoneId, access_token: token })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          feedback.innerHTML = `<span class="text-emerald-400 font-bold">🟢 ${data.message}</span>`;
+          showToast('WhatsApp Cloud Oficial Validado!', 'success');
+        } else {
+          feedback.innerHTML = `<span class="text-red-400">🔴 ${data.message}</span>`;
+          showToast(data.message, 'error');
+        }
+      } catch (err) {
+        feedback.innerHTML = `<span class="text-red-400">Erro: ${err.message}</span>`;
+      }
+    }
+
+    async function handleTestWhatsAppEvolution() {
+      const url = document.getElementById('conn-wa-evo-url').value.trim();
+      const key = document.getElementById('conn-wa-evo-key').value.trim();
+      const instance = document.getElementById('conn-wa-evo-instance').value.trim();
+      const feedback = document.getElementById('conn-wa-evo-feedback');
+
+      feedback.innerHTML = `<span class="text-gray-400">Testando Evolution API...</span>`;
+      try {
+        const res = await fetch('/api/connections/test-whatsapp-evolution', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ api_url: url, api_key: key, instance_name: instance })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          feedback.innerHTML = `<span class="text-emerald-400 font-bold">🟢 ${data.message}</span>`;
+          showToast('Evolution API Conectada!', 'success');
+        } else {
+          feedback.innerHTML = `<span class="text-red-400">🔴 ${data.message}</span>`;
+          showToast(data.message, 'error');
+        }
+      } catch (err) {
+        feedback.innerHTML = `<span class="text-red-400">Erro: ${err.message}</span>`;
+      }
+    }
+
+    function detectLocalEvolution() {
+      document.getElementById('conn-wa-evo-url').value = 'http://localhost:8080';
+      handleTestWhatsAppEvolution();
+    }
+
+    async function handleDiscoverMetaAccounts() {
+      const token = document.getElementById('conn-meta-token').value.trim();
+      const feedback = document.getElementById('conn-meta-feedback');
+      const btn = document.getElementById('btn-discover-meta');
+
+      if (!token) return showToast('Insira o Token de Acesso da Meta!', 'warning');
+
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Localizando...`;
+      feedback.innerHTML = `<span class="text-gray-400">Consultando contas...</span>`;
+      updateIcons();
+
+      try {
+        const res = await fetch('/api/connections/test-meta-graph', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ access_token: token })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          feedback.innerHTML = `<span class="text-emerald-400 font-bold">🟢 ${data.message}</span>`;
+          showToast('Contas da Meta descobertas com sucesso!', 'success');
+          
+          const section = document.getElementById('meta-discovered-section');
+          section.classList.remove('hidden');
+
+          const igSelect = document.getElementById('conn-meta-selected-ig');
+          igSelect.innerHTML = (data.instagram_accounts || []).map(ig => `
+            <option value="${ig.ig_id}">${ig.name || ig.username} (@${ig.username})</option>
+          `).join('') || '<option value="">Nenhuma conta do Instagram vinculada à Página</option>';
+
+          const pageSelect = document.getElementById('conn-meta-selected-page');
+          pageSelect.innerHTML = (data.pages || []).map(p => `
+            <option value="${p.page_id}">${p.page_name} (ID: ${p.page_id})</option>
+          `).join('') || '<option value="">Nenhuma página encontrada</option>';
+        } else {
+          feedback.innerHTML = `<span class="text-red-400">🔴 ${data.message}</span>`;
+          showToast(data.message, 'error');
+        }
+      } catch (err) {
+        feedback.innerHTML = `<span class="text-red-400">Erro: ${err.message}</span>`;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="search" class="w-4 h-4"></i> 🔍 Auto-Descobrir Minhas Contas`;
+        updateIcons();
+      }
+    }
+
+    async function handleTestTelegram() {
+      const token = document.getElementById('conn-tg-token').value.trim();
+      const chat = document.getElementById('conn-tg-chat').value.trim();
+      const feedback = document.getElementById('conn-tg-feedback');
+
+      if (!token) return showToast('Insira o Token do Bot!', 'warning');
+
+      try {
+        const res = await fetch('/api/connections/test-telegram', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ bot_token: token, chat_id: chat })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          feedback.innerHTML = `<span class="text-emerald-400 font-bold">🟢 ${data.message}</span>`;
+          showToast('Bot do Telegram OK!', 'success');
+        } else {
+          feedback.innerHTML = `<span class="text-red-400">🔴 ${data.message}</span>`;
+          showToast(data.message, 'error');
+        }
+      } catch (err) {
+        feedback.innerHTML = `<span class="text-red-400">Erro: ${err.message}</span>`;
+      }
+    }
+
+    async function saveAllConnections() {
+      const payload = {
+        llm_provider: document.getElementById('conn-llm-prov')?.value || 'deepseek',
+        llm_model: document.getElementById('conn-llm-model')?.value || 'deepseek-chat',
+        llm_key: document.getElementById('conn-llm-key')?.value || '',
+        llm_url: document.getElementById('conn-llm-url')?.value || '',
+        whatsapp_cloud_phone_id: document.getElementById('conn-wa-cloud-phoneid')?.value || '',
+        whatsapp_cloud_token: document.getElementById('conn-wa-cloud-token')?.value || '',
+        whatsapp_evo_url: document.getElementById('conn-wa-evo-url')?.value || '',
+        whatsapp_evo_key: document.getElementById('conn-wa-evo-key')?.value || '',
+        whatsapp_evo_instance: document.getElementById('conn-wa-evo-instance')?.value || '',
+        meta_token: document.getElementById('conn-meta-token')?.value || '',
+        meta_selected_ig: document.getElementById('conn-meta-selected-ig')?.value || '',
+        meta_selected_page: document.getElementById('conn-meta-selected-page')?.value || '',
+        telegram_token: document.getElementById('conn-tg-token')?.value || '',
+        telegram_chat: document.getElementById('conn-tg-chat')?.value || ''
+      };
+
+      try {
+        const res = await fetch('/api/connections/save-all', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          showToast('Todas as conexões foram salvas com sucesso!', 'success');
+          const pill = document.getElementById('active-connections-pill');
+          if (pill) pill.innerText = '🟢 Ativo';
+          closeConnectionsModal();
+        }
+      } catch (err) {
+        showToast('Erro ao salvar: ' + err.message, 'error');
+      }
+    }
+
+    async function loadConnectionsStatus() {
+      try {
+        const resHw = await fetch('/api/connections/hardware-profile');
+        const dataHw = await resHw.json();
+        if (dataHw.status === 'success') {
+          const p = dataHw.profile;
+          document.getElementById('hw-status-text').innerText = p.profile === 'heavy' ? 'PC Potente (GPU)' : 'PC Leve';
+          document.getElementById('hw-info-os').innerText = `${p.os} ${p.os_release}`;
+          document.getElementById('hw-info-cpu').innerText = p.processor || 'CPU x86_64';
+          document.getElementById('hw-info-gpu').innerText = p.gpu_name;
+          document.getElementById('hw-info-vram').innerText = `${p.vram_gb} GB`;
+          document.getElementById('hw-info-rec').innerText = p.recommendation;
+          const badge = document.getElementById('hw-profile-badge');
+          if (badge) {
+            badge.innerText = p.profile === 'heavy' ? 'PC Potente (NVIDIA RTX)' : 'PC Leve (Otimizado)';
+            badge.className = p.profile === 'heavy' ? 'px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[10px]' : 'px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold text-[10px]';
+          }
+        }
+
+        const resStatus = await fetch('/api/connections/status');
+        const dataStatus = await resStatus.json();
+        if (dataStatus.status === 'success') {
+          const c = dataStatus.config;
+          if (document.getElementById('conn-llm-prov')) document.getElementById('conn-llm-prov').value = c.llm_provider || 'deepseek';
+          if (document.getElementById('conn-llm-model')) document.getElementById('conn-llm-model').value = c.deepseek_model || 'deepseek-chat';
+          if (document.getElementById('conn-llm-url')) document.getElementById('conn-llm-url').value = c.deepseek_base_url || 'https://api.deepseek.com/v1';
+          if (document.getElementById('conn-wa-cloud-phoneid')) document.getElementById('conn-wa-cloud-phoneid').value = c.whatsapp_cloud_phone_number_id || '';
+          if (document.getElementById('conn-wa-evo-url')) document.getElementById('conn-wa-evo-url').value = c.whatsapp_evolution_api_url || 'http://localhost:8080';
+          if (document.getElementById('conn-meta-token')) document.getElementById('conn-meta-token').value = c.meta_access_token || '';
+          if (document.getElementById('conn-tg-token')) document.getElementById('conn-tg-token').value = c.telegram_bot_token || '';
+          if (document.getElementById('conn-tg-chat')) document.getElementById('conn-tg-chat').value = c.telegram_chat_id || '';
+        }
+      } catch (err) {
+        console.error('Erro ao checar status de conexões:', err);
+      }
+    }
+
+    // ==================== MODO RÁPIDO (EXPRESS) 1-CLIQUE ====================
+    const NICHE_HOOK_PRESETS = {
+      advocacia: [
+        "Se o seu chefe te disse isso hoje, você tem direito a receber tudo em dobro!",
+        "Três coisas que a loja NUNCA pode te obrigar a fazer:",
+        "Cuidado: se você assinar esse documento na demissão sem ler, perde direitos!",
+        "Você sabia que o banco não pode cobrar essa tarifa na sua conta?"
+      ],
+      politica: [
+        "O novo projeto aprovado nesta semana vai impactar diretamente o seu bolso!",
+        "Você sabia que tem direito de fiscalizar cada centavo gasto na sua cidade?",
+        "Entenda em 30 segundos o que mudou na lei eleitoral brasileira:"
+      ],
+      tecnologia: [
+        "Essa inteligência artificial gratuita faz o trabalho de 4 horas em 10 segundos!",
+        "Pare de perder tempo com tarefas repetitivas: use esta automação agora:",
+        "Três ferramentas de IA brasileiras que estão superando os gringos:"
+      ],
+      educacao: [
+        "O método que os alunos mais rápidos usam para memorizar qualquer conteúdo:",
+        "Se você estuda para concursos ou vestibulares, pare de cometer esse erro:",
+        "Três técnicas comprovadas pela neurociência para aprender duas vezes mais rápido:"
+      ],
+      publicidade: [
+        "A estrutura exata de anúncio que gerou mais de R$ 100 mil no Reels:",
+        "O gancho que você precisa usar nos primeiros 3 segundos do seu anúncio:",
+        "Três erros que estão queimando o seu orçamento no tráfego pago:"
+      ],
+      financas: [
+        "Onde deixar sua reserva de emergência rendendo com liquidez diária no Brasil:",
+        "Se você é MEI, essa regra do Imposto de Renda pode te salvar de multas:",
+        "Três hábitos simples que colocam dinheiro no seu bolso todos os meses:"
+      ],
+      saude: [
+        "Três sinais de que seu corpo está pedindo socorro e você está ignorando:",
+        "A combinação de alimentos simples que dobra a sua energia no dia a dia:",
+        "O maior mito sobre alimentação que quase todo mundo ainda acredita:"
+      ]
+    };
+
+    function onExpressNicheChange() {
+      const niche = document.getElementById('express-niche-select').value;
+      const hooks = NICHE_HOOK_PRESETS[niche] || NICHE_HOOK_PRESETS['advocacia'];
+      document.getElementById('express-hook-input').value = hooks[0];
+      document.getElementById('express-topic-input').value = `Dica prática e essencial de ${niche}`;
+    }
+
+    function cycleExpressHook() {
+      const niche = document.getElementById('express-niche-select').value;
+      const hooks = NICHE_HOOK_PRESETS[niche] || NICHE_HOOK_PRESETS['advocacia'];
+      const current = document.getElementById('express-hook-input').value;
+      const next = hooks[(hooks.indexOf(current) + 1) % hooks.length];
+      document.getElementById('express-hook-input').value = next;
+      showToast('Gancho alternado!', 'info');
+    }
+
+    function useHookInExpress(hook, topic) {
+      switchTab('express');
+      document.getElementById('express-hook-input').value = hook;
+      if (topic) document.getElementById('express-topic-input').value = topic;
+      showToast('Gancho viral importado para o Modo Rápido!', 'success');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderExpressClonesSelector() {
+      const container = document.getElementById('express-clones-selector');
+      if (!container) return;
+
+      if (state.clones.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-2 p-3 bg-gray-950 border border-gray-800 rounded-xl text-center">
+            <span class="text-xs text-gray-300 font-semibold block">Avatar Padrão do Sistema</span>
+            <span class="text-[10px] text-gray-500 block">Nenhum avatar personalizado ainda</span>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = state.clones.map((c, idx) => `
+        <div onclick="selectExpressClone('${c.id}')" class="p-2.5 rounded-xl border cursor-pointer transition flex items-center gap-2 ${
+          (state.selectedCloneId === c.id || (!state.selectedCloneId && idx === 0)) ? 'bg-indigo-950/40 border-indigo-500 shadow-md shadow-indigo-500/20' : 'bg-gray-950 border-gray-800 hover:border-gray-700'
+        }">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center font-bold text-xs">
+            ${c.name.substring(0, 2).toUpperCase()}
+          </div>
+          <div class="overflow-hidden">
+            <div class="font-bold text-white text-xs truncate">${c.name}</div>
+            <div class="text-[10px] text-gray-400">${c.tags || 'Avatar IA'}</div>
+          </div>
+        </div>
+      `).join('');
+      updateIcons();
+    }
+
+    function selectExpressClone(cloneId) {
+      state.selectedCloneId = cloneId;
+      renderExpressClonesSelector();
+    }
+
+    async function handleExecuteExpress() {
+      const btn = document.getElementById('btn-execute-express');
+      const niche = document.getElementById('express-niche-select').value;
+      const hook = document.getElementById('express-hook-input').value.trim();
+      const topic = document.getElementById('express-topic-input').value.trim();
+      const prov = document.getElementById('express-llm-select').value;
+
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Estruturando com IA...`;
+      updateIcons();
+
+      try {
+        const res = await fetch('/api/express/create-auto-video', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            clone_id: state.selectedCloneId,
+            niche: niche,
+            topic: topic,
+            hook_text: hook,
+            target_platforms: ['instagram', 'whatsapp', 'tiktok'],
+            llm_provider: prov
+          })
+        });
+
+        const data = await res.json();
+        if (data.status === 'success') {
+          // Preenche os 4 atos
+          document.getElementById('express-act-1').innerText = data.acts[0].content;
+          document.getElementById('express-act-2').innerText = data.acts[1].content;
+          document.getElementById('express-act-3').innerText = data.acts[2].content;
+          document.getElementById('express-act-4').innerText = data.acts[3].content;
+
+          // Score Badge
+          const score = data.audit?.retention_score || 85;
+          document.getElementById('express-score-val').innerText = `${score}/100`;
+
+          // Capa / Thumbnail
+          if (data.thumbnail_url) {
+            const coverImg = document.getElementById('express-cover-img');
+            coverImg.src = data.thumbnail_url + '?t=' + Date.now();
+            coverImg.classList.remove('hidden');
+            document.getElementById('express-cover-placeholder').classList.add('hidden');
+            const dlLink = document.getElementById('express-cover-download');
+            dlLink.href = data.thumbnail_url;
+            dlLink.classList.remove('hidden');
+          }
+
+          // Quick Share Links
+          if (data.quick_share) {
+            document.getElementById('express-wa-share').href = data.quick_share.whatsapp_link;
+            document.getElementById('express-tg-share').href = data.quick_share.telegram_link;
+          }
+
+          // Preenche também para a aba Roteiro caso queira editar
+          document.getElementById('full-script-text').value = data.script;
+
+          // Guarda cópias no state para a aba social
+          state.generatedCopies = data.copies;
+          showToast('Vídeo e Roteiro gerados com sucesso!', 'success');
+        } else {
+          showToast('Erro ao gerar: ' + data.message, 'error');
+        }
+      } catch (err) {
+        showToast('Erro de conexão: ' + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4 fill-white"></i> Criar Vídeo & Roteiro em 1 Clique`;
+        updateIcons();
+      }
+    }
+
+    function goToSocialTabWithExpress() {
+      switchTab('social');
+      if (state.generatedCopies) {
+        if (state.generatedCopies.instagram?.caption) {
+          document.getElementById('copy-instagram').value = state.generatedCopies.instagram.caption + '\n\n' + (state.generatedCopies.instagram.hashtags || []).join(' ');
+        }
+        if (state.generatedCopies.tiktok?.caption) {
+          document.getElementById('copy-tiktok').value = state.generatedCopies.tiktok.caption + '\n\n' + (state.generatedCopies.tiktok.hashtags || []).join(' ');
+        }
+        if (state.generatedCopies.kwai?.caption) {
+          document.getElementById('copy-kwai').value = state.generatedCopies.kwai.caption;
+        }
+        if (state.generatedCopies.whatsapp) {
+          document.getElementById('copy-whatsapp').value = state.generatedCopies.whatsapp;
+        }
+      }
+    }
+
     // Startup
     window.addEventListener('DOMContentLoaded', () => {
       updateIcons();
-      loadClones();
+      loadClones().then(() => renderExpressClonesSelector());
       loadSubtitleStyles();
       renderTimelineLayers();
       loadSocialSettings();
       loadRadarNichesAndRegions();
+      loadConnectionsStatus();
+      onExpressNicheChange();
     });
   </script>
 </body>

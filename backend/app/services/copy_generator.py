@@ -62,50 +62,59 @@ class CopyGenerator:
             {"role": "user", "content": user_content}
         ]
 
-        raw_output = await UnifiedLLMClient.generate_completion(
-            messages=messages,
-            provider=provider,
-            api_key=api_key,
-            base_url=base_url,
-            temperature=0.7,
-            response_format={"type": "json_object"} if provider != "maritaca" else None
-        )
-
-        cleaned = raw_output.strip()
-        if cleaned.startswith("```json"):
-            cleaned = cleaned[7:]
-        elif cleaned.startswith("```"):
-            cleaned = cleaned[3:]
-        if cleaned.endswith("```"):
-            cleaned = cleaned[:-3]
-        cleaned = cleaned.strip()
+        first_line = script_text.split("\n")[0] if script_text else "Novo vídeo gerado com IA!"
+        fallback_data = {
+            "instagram": {
+                "caption": f"🚀 {first_line}\n\nO que você achou desse conteúdo? Deixe sua opinião nos comentários! 👇",
+                "hashtags": ["#ia", "#inteligenciaartificial", "#reels", "#tecnologia", "#brasil"]
+            },
+            "tiktok": {
+                "caption": f"{first_line[:100]} 🔥",
+                "hashtags": ["#fyp", "#foryou", "#viral", "#tech"]
+            },
+            "kwai": {
+                "caption": f"Olha isso! {first_line[:100]}",
+                "hashtags": ["#kwaibrasil", "#curiosidades"]
+            },
+            "facebook": {
+                "title": first_line[:60],
+                "caption": script_text[:250] + "..."
+            },
+            "whatsapp": f"*🎬 Novo Vídeo Disponível!*\n\n{first_line}\n\nAssista agora e compartilhe com seus amigos!",
+            "telegram": f"*🎬 Novo Vídeo Disponível!*\n\n{first_line}\n\nAssista agora e compartilhe!",
+            "whatsapp_telegram": {
+                "message": f"*🎬 Novo Vídeo Disponível!*\n\n{first_line}\n\nAssista agora e compartilhe!"
+            },
+            "signal": {
+                "message": f"Vídeo: {first_line}"
+            }
+        }
 
         try:
-            return json.loads(cleaned)
+            raw_output = await UnifiedLLMClient.generate_completion(
+                messages=messages,
+                provider=provider,
+                api_key=api_key,
+                base_url=base_url,
+                temperature=0.7,
+                response_format={"type": "json_object"} if provider != "maritaca" else None
+            )
+
+            cleaned = raw_output.strip()
+            if cleaned.startswith("```json"):
+                cleaned = cleaned[7:]
+            elif cleaned.startswith("```"):
+                cleaned = cleaned[3:]
+            if cleaned.endswith("```"):
+                cleaned = cleaned[:-3]
+            cleaned = cleaned.strip()
+
+            parsed = json.loads(cleaned)
+            # Garantir chaves diretas whatsapp e telegram
+            if "whatsapp" not in parsed and "whatsapp_telegram" in parsed:
+                parsed["whatsapp"] = parsed["whatsapp_telegram"].get("message", "")
+            if "telegram" not in parsed and "whatsapp_telegram" in parsed:
+                parsed["telegram"] = parsed["whatsapp_telegram"].get("message", "")
+            return parsed
         except Exception:
-            # Fallback seguro
-            first_line = script_text.split("\n")[0] if script_text else "Novo vídeo gerado com IA!"
-            return {
-                "instagram": {
-                    "caption": f"🚀 {first_line}\n\nO que você achou desse conteúdo? Deixe sua opinião nos comentários! 👇",
-                    "hashtags": ["#ia", "#inteligenciaartificial", "#reels", "#tecnologia", "#brasil"]
-                },
-                "tiktok": {
-                    "caption": f"{first_line[:100]} 🔥",
-                    "hashtags": ["#fyp", "#foryou", "#viral", "#tech"]
-                },
-                "kwai": {
-                    "caption": f"Olha isso! {first_line[:100]}",
-                    "hashtags": ["#kwaibrasil", "#curiosidades"]
-                },
-                "facebook": {
-                    "title": first_line[:60],
-                    "caption": script_text[:250] + "..."
-                },
-                "whatsapp_telegram": {
-                    "message": f"*🎬 Novo Vídeo Disponível!*\n\n{first_line}\n\nAssista agora e compartilhe!"
-                },
-                "signal": {
-                    "message": f"Vídeo: {first_line}"
-                }
-            }
+            return fallback_data

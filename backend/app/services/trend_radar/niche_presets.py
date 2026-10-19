@@ -1112,3 +1112,6 @@ class NicheManager:
             "top_profiles": NicheManager.get_top_profiles_for_niche(f"custom_{slug}")
         }
         return custom_data
+
+NichePresets = NicheManager
+

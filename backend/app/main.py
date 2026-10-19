@@ -12,6 +12,8 @@ from app.api.endpoints_timeline import router as timeline_router
 from app.api.endpoints_render import router as render_router
 from app.api.endpoints_social import router as social_router
 from app.api.endpoints_radar import router as radar_router
+from app.api.endpoints_connections import router as connections_router
+from app.api.endpoints_express import router as express_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -35,6 +37,8 @@ app.include_router(timeline_router, prefix=f"{settings.API_PREFIX}/timeline", ta
 app.include_router(render_router, prefix=f"{settings.API_PREFIX}/render", tags=["Renderização"])
 app.include_router(social_router, prefix=f"{settings.API_PREFIX}/social", tags=["Social & Distribuição"])
 app.include_router(radar_router, prefix=f"{settings.API_PREFIX}/radar", tags=["Radar & Tendências"])
+app.include_router(connections_router, prefix=f"{settings.API_PREFIX}/connections", tags=["Conexões & APIs"])
+app.include_router(express_router, prefix=f"{settings.API_PREFIX}/express", tags=["Piloto Automático"])
 
 # Montar pastas estáticas para uploads e vídeos gerados
 app.mount("/uploads", StaticFiles(directory=str(settings.UPLOADS_DIR)), name="uploads")

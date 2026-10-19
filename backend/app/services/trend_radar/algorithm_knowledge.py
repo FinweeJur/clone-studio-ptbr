@@ -208,3 +208,8 @@ class AlgorithmIntelligenceEngine:
             "estimated_words": word_count,
             "estimated_duration_sec": round((word_count / 140) * 60, 1)
         }
+
+    audit_script_retention = audit_script
+
+AlgorithmKnowledge = AlgorithmIntelligenceEngine
+
