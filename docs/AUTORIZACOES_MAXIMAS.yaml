@@ -1,0 +1,188 @@
+# ── AUTORIZAÇÕES MÁXIMAS ÚTEIS ─────────────────────────────
+# EstrelaQueBrilha — Controle Popular — 19/10/2026
+# Aprovado pelo usuário em 19/10/2026
+
+authorizations:
+  bots:
+    Secretaria:
+      gmail:
+        accounts:
+          - alias: UFVJM
+            scopes: [https://mail.google.com/]
+            filters:
+              label: inbox
+              subject_contains: "[UFVJM]"
+          - alias: Adv
+            scopes: [https://www.googleapis.com/auth/gmail.readonly]
+            filters:
+              label: priority
+              from_domain: "adv.ufvjm.edu"
+      google_calendar:
+        accounts:
+          - alias: secretaria_calendar
+            scopes: [https://www.googleapis.com/auth/calendar.readonly]
+            filters:
+              organizer_domain: "ufvjm.edu"
+      google_drive:
+        accounts:
+          - alias: secretaria_drive
+            scopes: [https://www.googleapis.com/auth/drive.readwrite]
+            filters:
+              folder_id: "SECRETARIA_SHARED"
+      whatsapp:
+        accounts:
+          - alias: secretaria_whatsapp
+            scopes: []
+            filters:
+              from_group: "Secretaria UFVJM"
+
+    DevCP:
+      github:
+        accounts:
+          - alias: finweejur_dev
+            scopes: [read-write]
+            repos:
+              - FinweeJur/*
+
+    Comunidade:
+      github:
+        accounts:
+          - alias: finweejur_community
+            scopes: [read-write]
+            repos:
+              - FinweeJur/*
+      canva:
+        accounts:
+          - alias: comunidade_canva
+            scopes: [read]
+
+    Marketing:
+      github:
+        accounts:
+          - alias: finweejur_marketing
+            scopes: [read-write]
+            repos:
+              - FinweeJur/clone-studio-ptbr
+      canva:
+        accounts:
+          - alias: canva_adv
+            scopes: [design:write, asset:write]
+      google_drive:
+        accounts:
+          - alias: marketing_drive
+            scopes: [https://www.googleapis.com/auth/drive.readwrite]
+            folder_id: "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs07X8ygaR"
+
+# ── TRIGGERS AUTOMÁTICOS ──────────────────────────────────
+triggers:
+
+# Marketing: vídeos a partir de commits
+  - name: "video-commit-detected"
+    when: app_event
+    app: github
+    event: push
+    filter:
+      repo: FinweeJur/clone-studio-ptbr
+      ref_contains: "video/"
+      path_matches: "**/{video,vid,conteudo-video}/**"
+    instructions: |
+      1. Verificar se os commits no push contêm arquivos de vídeo (.mp4, .mov, .webm, .avi, .mkv).
+      2. Extrair metadados: autor, msg, arquivos.
+      3. Gerar rascunho de vídeo (IA) com prompt padrão para TikTok/Reels.
+      4. Publicar rascunho no Canva (folder "Vídeos PR").
+      5. Registrar no Google Drive (sheet "Registro Vídeos") com:
+         Data, Commit SHA, Autor, Título, URL Canva, Status.
+      6. Se falhar, registrar erro (token expirou, filtro falhou, rate limit, conta errada).
+    risk_policy:
+      token_expiration: retry_with_new_token
+      filter_failure: escalate_to_owner
+      rate_limit_hit: exponential_backoff(5m,30m,1h)
+      wrong_account: fail_and_notify_admin
+    overlap: skip
+    timeout_minutes: 20
+    permissions:
+      github: read-write
+      canva: write
+      googledrive: write
+
+# Marketing: vídeos a partir de PRs
+  - name: "video-pull-request-created"
+    when: app_event
+    app: github
+    event: pull_request
+    filter:
+      repo: FinweeJur/clone-studio-ptbr
+      label_contains: "video"
+      state: open
+    instructions: |
+      1. Checar se PR tem label "video" ou branch/title com prefixo "video/".
+      2. Se incluir arquivos de vídeo, gerar vídeo curto (30-60s) destacando a mudança.
+      3. Criar design no Canva (1080x1920) e upload do vídeo renderizado.
+      4. Comentar no PR com link Canva + link para Drive.
+      5. Registrar no sheet "Registro Vídeos PR".
+      6. Retry/notify em caso de token, rate limit ou conta errada.
+    risk_policy:
+      token_expiration: retry_with_oauth_refresh
+      filter_failure: log_and_continue
+      rate_limit_hit: queue
+      wrong_account: notify_owner
+    permissions:
+      github: read-write
+      canva: write
+      googledrive: write
+
+# Marketing: vídeos de release
+  - name: "video-release-published"
+    when: app_event
+    app: github
+    event: release
+    filter:
+      repo: FinweeJur/clone-studio-ptbr
+      release_state: published
+      body_contains: "video/"
+      asset_type_in: [video/mp4, video/quicktime]
+    instructions: |
+      1. Verificar se o release contém assets de vídeo ou referencia "video/".
+      2. Gerar vídeo de lançamento (60-90s, Reels/Shorts).
+      3. Publicar no Canva (folder "Lançamentos").
+      4. Upload do .mp4 no Drive (subpasta "/Releases/{tag}").
+      5. Registrar no sheet "Registro Releases Vídeo": Tag, Data, Asset URL, URL Canva, URL Drive, Status.
+      6. Retry/notify conforme risco.
+    risk_policy:
+      token_expiration: renew_with_oidc
+      filter_failure: escalate_to_devops
+      rate_limit_hit: retry_with_jitter(3x, max_delay: 1h)
+      wrong_account: fail_hard
+    overlap: skip
+    timeout_minutes: 30
+    permissions:
+      github: read-write
+      canva: write
+      googledrive: write
+
+# ── VERIFICAÇÃO E MONITORAMENTO ────────────────────────────
+verification:
+  post_run_checks:
+    - github_token_valid: "Check GET /rate_limit; 401 → refresh OAuth."
+    - canva_api_up: "GET /api/v1/health; 5xx → retry later."
+    - drive_quota_ok: "Check storage via Drive API quota; <10% → notificar admin."
+    - log_all_failures: "Registrar em sheet 'Falhas Automáticas' com trigger, timestamp, código e msg."
+    - security_review: "Auditar logs mensalmente; tokens rotacionados a cada 90 dias."
+
+# ── POLÍTICAS DE SEGURANÇA E GOVERNANÇA ──────────────────
+policies:
+  token_rotation: 90d
+  token_notify_before: 10d
+  rate_limit_policy: exponential_backoff
+  concurrency: skip
+  continuity: true
+  timeout_minutes: 30
+  least_privilege: true
+  audit_logs: weekly
+
+# ── OBSERVAÇÕES PARA EXECUÇÃO ─────────────────────────────
+# 1. Dev CP deve implementar os triggers como automações no repo.
+# 2. Marketing deve receber instruções de template de prompt e folder IDs.
+# 3. Secretaria e Comunidade mantêm escopos conforme widget.
+# 4. Todos os triggers usam app_event quando suportado.
+# 5. Filtros aplicados no source (GitHub) para reduzir ruído.
